@@ -314,3 +314,4 @@ modules.xml
 knufestival.sql
 .credential/
 db_volume/
+pipeline.sh
