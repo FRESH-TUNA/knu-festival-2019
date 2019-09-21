@@ -9,7 +9,7 @@ services:
       - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/db_volume:/var/lib/postgresql/data
 
   web:
-    image: lunacircle4/knu_festival:develop
+    image: lunacircle4/knu-festival:develop
     env_file: 
       - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/web/docker/dev/credential.env
     volumes:

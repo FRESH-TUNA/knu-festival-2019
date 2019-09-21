@@ -6,7 +6,7 @@ DEBUG = True
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-ROOT_URLCONF = 'festival.urls'
+ROOT_URLCONF = 'festival.urls.production'
 
 ALLOWED_HOSTS = [os.environ['WEB_HOST']]
 

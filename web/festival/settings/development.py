@@ -11,13 +11,11 @@ DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
 
-ROOT_URLCONF = 'festival.urls'
+ROOT_URLCONF = 'festival.urls.development'
 #media 설정
 
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
-
-MEDIA_URL = '/media/'
 
 DATABASES = {
     'default': {
