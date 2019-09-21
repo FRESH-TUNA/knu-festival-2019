@@ -1,3 +1,4 @@
+# from django.views.generic import View, BaseListView
 from django.shortcuts import render, redirect, get_object_or_404
 from friendboard.models import Post, Comment
 from friendboard.forms import PostForm, CommentForm
@@ -5,6 +6,24 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import Http404
 # 술친구 views.py
+
+# class friendboard(BaseListView):
+#     queryset = Post.objects.all()
+#     paginate_by = 10
+#     page = request.GET.get('page')
+#     context_object_name = "post_list"
+
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         return super.get_context_data()
+
+#     if request.method == 'POST':
+#         form = PostForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/friendboard/')
+#     else:
+#         form = PostForm()
+#     return render(request,'friendboard.html',{'post_list':post_list,'form':form})
 
 def friendboard(request):
     post_list = Post.objects.all()
