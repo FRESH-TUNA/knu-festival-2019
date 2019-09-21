@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  db:
+    env_file: 
+      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/web/docker/dev/db_credential.env
+    image: postgres
+    volumes:
+      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/db_volume:/var/lib/postgresql/data
+
+  web:
+    image: lunacircle4/knu_festival:develop
+    env_file: 
+      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/web/docker/dev/credential.env
+    volumes:
+      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival:/app
+    ports:
+      - "8000:8000"
+    command: 
+      - /bin/zsh
+      - -c
+      - |
+        source /root/.pyenv/versions/knu_festival/bin/activate
+        python /app/web/manage.py runserver 0.0.0.0:8000

@@ -26,7 +26,7 @@ def haminseop(request):
     return render(request,'haminseop.html',{'foodtrucks': foodtrucks, 'booths': booths})
 
 def mirae(request):
-    booths = Booth.objects.all().filter(divi=3).order_by(id)
+    booths = Booth.objects.all().filter(divi=3).order_by('id')
     if len(booths)%2 == 0:
         booths1 = booths[:int(len(booths)/2)]
         booths2 = booths[int(len(booths)/2):]
