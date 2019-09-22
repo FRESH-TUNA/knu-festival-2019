@@ -16,22 +16,25 @@
 * Django : 2.2.4
 
 
-## 3) 웹서비스 주요기능
+## 3. 웹서비스 주요기능
 1. 라인업, 타임테이블, 이벤트 정보를 제공한다.
 2. 푸드트럭 및 부스 정보를 제공한다.
 3. 술친구 찾기 및 분실물 찾기 게시판 기능을 제공한다.
 4. 푸드트럭 사장님들을 위한 admin 페이지를 제공한다.
 
-<!-- ## 5. 주요 소스 코드
-### 1. 도커를 활용한 개발, 테스트, 배포 환경
-```/docker/dev/Dockerfile``` [<a href="/docker/dev/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
-```/docker/dev/docker-compose.yml``` [<a href="/docker/dev/docker-compose.yml">이동</a>] 개발 환경 작동 파일<br/>
-```/floweryroad/settings/development.py``` [<a href="/floweryroad/settings/development.py">이동</a>] 개발 settings
+## 4. 주요 소스 코드
+### 1. 도커를 활용한 개발, 배포 환경
+```/web/docker/dev/Dockerfile``` [<a href="/web/docker/dev/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
+```/web/dev/docker-compose.yml``` [<a href="/web/dev/docker-compose.yml">이동</a>] 개발 환경 작동 파일<br/>
+```/web/festival/settings/development.py``` [<a href="/web/festival/settings/development.py">이동</a>] 개발 settings
 <br/><br/>
-```/docker/test/docker-compose.yml``` [<a href="/docker/test/docker-compose.yml">이동</a>] 테스트 환경 작동파일
+```/docker-compose/prod/docker-compose.yml``` [<a href="/docker-compose/prod/docker-compose.yml">이동</a>] 배포 환경 작동파일<br/>
+```/web/festival/settings/development.py``` [<a href="/web/festival/settings/development.py">이동</a>] 배포 settings
 <br/><br/>
-```/docker/prod/Dockerfile``` [<a href="/docker/prod/Dockerfile">이동</a>] 배포 환경을 위한 이미지<br/>
-```/docker/prod/docker-compose.yml``` [<a href="/docker/prod/docker-compose.yml">이동</a>] 배포 환경 작동파일<br/>
-```/floweryroad/settings/docker_production.py``` [<a href="/floweryroad/settings/docker_production.py">이동</a>] 테스트, 배포 settings
-<br/><br/>
-```/pipeline``` [<a href="/pipeline">이동</a>] 배포 파이프라인 -->
+```/pipeline_open.sh``` [<a href="/pipeline_open.sh">이동</a>] 배포 파이프라인
+
+## 5. 파이프라인
+1. master 브랜치에 푸시한다.
+2. github가 docker hub로 hook을 보낸다.
+3. docker hub에서 이미지를 빌드한후 jenkins로 hook을 보낸다.
+4. jenkins에서 /pipeline_open.sh을 실행하여 배포를 완료한다.
