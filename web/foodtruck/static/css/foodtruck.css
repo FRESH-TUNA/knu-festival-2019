@@ -177,6 +177,7 @@ p{
    margin-bottom:10px;
    border:1px solid #FF68AF;
    border-radius: 7px;
+   overflow: scroll;
 }
 .modal_menu .modal_table{
    width:276px;
@@ -201,4 +202,8 @@ p{
    display:flex;
    flex-flow:column;
    text-align:right;
+}
+
+.oops {
+   transform: rotate(90deg);
 }
