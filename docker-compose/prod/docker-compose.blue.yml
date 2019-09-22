@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  knufestival_network:
+    external: true
+
+services:
+  web_blue:
+    ports: 80:80
+    
+    env_file: 
+      - /app/.credential/credential.env
+
+    image: lunacircle4/knu-festival
+
+    volumes:
+      - /app/static:/app/static  
+      - /app/media:/app/media
+
+    networks:
+      - knufestival_network
+
+    command: 
+      - /bin/bash
+      - -c
+      - |
+        supervisord

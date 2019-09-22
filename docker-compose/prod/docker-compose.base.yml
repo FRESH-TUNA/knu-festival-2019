@@ -1,0 +1,16 @@
+version: '3'
+
+networks:
+  network:
+    driver: bridge
+    
+services:
+  db:
+    env_file: 
+      - /app/.credential/db_credential.env
+    image: postgres
+    volumes:
+      - /app/db_volume:/var/lib/postgresql/data
+    networks:
+      - network
+    
