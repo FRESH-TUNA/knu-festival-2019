@@ -313,5 +313,7 @@ modules.xml
 .ebextensions/
 knufestival.sql
 .credential/
+credential.env
+db_credential.env
 db_volume/
 pipeline.sh
