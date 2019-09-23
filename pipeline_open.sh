@@ -10,7 +10,6 @@
 # docker build -t lunacircle4/nginx:floweryroad-backend  -f docker/nginx/prod/Dockerfile .
 # docker push lunacircle4/nginx:floweryroad-backend
 
-ssh -tt -i <pem경로> ec2-user@http://52.79.154.224/   "\
-                                    docker-compose -f /app/docker-compose.yml down  && \
-                                    docker-compose -f /app/docker-compose.yml pull  && \
-                                    docker-compose -f /app/docker-compose.yml up -d"
+ssh -tt -i <pem경로> ec2-user@52.79.154.224/    "\
+                                    bash /app/deploy.sh"
+

@@ -1,13 +1,11 @@
 version: '3'
 
 networks:
-  knufestival_network:
+  knufestival_default:
     external: true
 
 services:
-  web_blue:
-    ports: 80:80
-    
+  web_blue:    
     env_file: 
       - /app/.credential/credential.env
 
@@ -18,7 +16,7 @@ services:
       - /app/media:/app/media
 
     networks:
-      - knufestival_network
+      - knufestival_default
 
     command: 
       - /bin/bash
