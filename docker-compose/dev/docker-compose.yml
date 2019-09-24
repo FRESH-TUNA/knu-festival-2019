@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     env_file: 
-      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/web/docker/dev/db_credential.env
+      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/docker-compose/dev/db_credential.env
     image: postgres
     volumes:
       - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/db_volume:/var/lib/postgresql/data
@@ -11,7 +11,7 @@ services:
   web:
     image: lunacircle4/knu-festival:develop
     env_file: 
-      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/web/docker/dev/credential.env
+      - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival/docker-compose/dev/credential.env
     volumes:
       - /Users/kimdongwon/Documents/WebProgramming/Projects/knu-festival:/app
     ports:

@@ -93,7 +93,7 @@
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form action="{% url 'friendboard:friendboard' %}" method = "POST">
+                            <form action="{% url 'friendboard:create' %}" method = "POST">
                                 {% csrf_token %}
                                 <div class="modal-body">
                                     <p><textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content" placeholder="술친구 구해욧"></textarea></p>

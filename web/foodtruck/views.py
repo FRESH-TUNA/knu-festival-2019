@@ -9,7 +9,7 @@ import logging
 
 # 푸드트럭 views.py
 def foodtruck(request):
-    foodtrucks = Foodtruck.objects.all().filter(divi=1).order_by('id')
+    foodtrucks = Foodtruck.objects.all().prefetch_related('menus').filter(divi=1).order_by('id')
     if len(foodtrucks)%2 == 0:
         foodtrucks1 = foodtrucks[:int(len(foodtrucks)/2)]
         foodtrucks2 = foodtrucks[int(len(foodtrucks)/2):]
@@ -20,13 +20,13 @@ def foodtruck(request):
     return render(request,'foodtruck.html',{'foodtrucks1': foodtrucks1, 'foodtrucks2': foodtrucks2})
 
 def haminseop(request):
-    foodtrucks = Foodtruck.objects.all().filter(divi=2).order_by('id')
-    booths = Booth.objects.all().filter(divi=2).order_by('id')
+    foodtrucks = Foodtruck.objects.all().prefetch_related('menus').filter(divi=2).order_by('id')
+    booths = Booth.objects.all().prefetch_related('menus').filter(divi=2).order_by('id')
     # print(foodtrucks.name)
     return render(request,'haminseop.html',{'foodtrucks': foodtrucks, 'booths': booths})
 
 def mirae(request):
-    booths = Booth.objects.all().filter(divi=3).order_by('id')
+    booths = Booth.objects.prefetch_related('menus').all().filter(divi=3).order_by('id')
     if len(booths)%2 == 0:
         booths1 = booths[:int(len(booths)/2)]
         booths2 = booths[int(len(booths)/2):]
@@ -65,7 +65,7 @@ def booth_select(request, pk):
     return render(request,'select.html', {'booth': booth})
 
 def foodtruck_menu_list(request, pk):
-    foodtruck = Foodtruck.objects.get(pk=pk)
+    foodtruck = Foodtruck.objects.select_related('user').get(pk=pk)
     if request.method == 'GET':
         return render(request,'menu.html', {'foodtruck': foodtruck})
     elif foodtruck.user == request.user:
@@ -83,7 +83,7 @@ def foodtruck_menu_list(request, pk):
         return redirect('foodtruck:foodtruck_menu_list', pk=foodtruck.pk)
 
 def foodtruck_menu_delete(request, pk):
-    deleted_menu = menu.objects.get(pk=pk)
+    deleted_menu = menu.objects.select_related('foodtruck__user').get(pk=pk)
     foodtruck = deleted_menu.foodtruck
     if request.user == deleted_menu.foodtruck.user:
         deleted_menu.delete()
@@ -95,7 +95,7 @@ def foodtruck_menu_delete(request, pk):
 
 
 def foodtruck_menu_update(request, pk):
-    updated_menu = menu.objects.get(pk=pk)
+    updated_menu = menu.objects.select_related('foodtruck__user').get(pk=pk)
     if request.user == updated_menu.foodtruck.user:
         updated_menu.food = request.POST['food']
         updated_menu.price = request.POST['price']
@@ -107,7 +107,7 @@ def foodtruck_menu_update(request, pk):
         return redirect('foodtruck:foodtruck_menu_list', pk=updated_menu.foodtruck.pk)
 
 def foodtruck_update(request, pk):
-    foodtruck = Foodtruck.objects.get(pk=pk)
+    foodtruck = Foodtruck.objects.select_related('user').get(pk=pk)
     if request.method == 'GET':
         return render(request,'updateFoodtruck.html',{'foodtruck': foodtruck})
     elif request.user == foodtruck.user:
