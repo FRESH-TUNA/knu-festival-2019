@@ -33,8 +33,12 @@
 <br/><br/>
 ```/pipeline_open.sh``` [<a href="/pipeline_open.sh">이동</a>] 배포 파이프라인
 
+<br/><br/>
+```/pipeline_open.sh``` [<a href="/deploy.sh">이동</a>] blue, green 배포 스크립트
+
 ## 5. 파이프라인
 1. master 브랜치에 푸시한다.
 2. github가 docker hub로 hook을 보낸다.
 3. docker hub에서 이미지를 빌드한후 jenkins로 hook을 보낸다.
-4. jenkins에서 /pipeline_open.sh을 실행하여 배포를 완료한다.
+4. jenkins에서 /pipeline_open.sh을 실행한다.
+5. deploy.sh를 실행하여 blue, green 배포를 실행한다.
