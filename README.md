@@ -34,9 +34,7 @@
 ```/web/festival/settings/development.py``` [<a href="/web/festival/settings/development.py">이동</a>] 배포 settings
 <br/><br/>
 ```/pipeline_open.sh``` [<a href="/pipeline_open.sh">이동</a>] 배포 파이프라인
-
-<br/><br/>
-```/pipeline_open.sh``` [<a href="/deploy.sh">이동</a>] blue, green 배포 스크립트
+```/deploy.sh``` [<a href="/deploy.sh">이동</a>] blue, green 배포 스크립트
 
 ## 5. 파이프라인
 1. master 브랜치에 푸시한다.
