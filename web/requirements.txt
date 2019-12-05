@@ -1,4 +1,4 @@
-Django==2.2.5
+Django==2.2.8
 django-appconf==1.0.3
 django-autofixture==0.12.1
 django-compressor==2.3
