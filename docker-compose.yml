@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  db:
+    env_file: 
+      - db/.env
+    image: postgres:12.2-alpine
+    container_name: knufestival2019-db
+    volumes:
+      - ./db/volume:/var/lib/postgresql/data
+
+  web:
+    env_file:
+      - web/envs/.dev
+    container_name: knufestival2019-web
+    build:
+      context: ./web
+      dockerfile: ./Dockerfile
+      target: dev
+    volumes:
+      - "./web:/web"
+    ports:
+      - "8000:8000"
+    command:
+      - /bin/bash
+    stdin_open: true
+    tty: true

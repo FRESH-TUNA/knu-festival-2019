@@ -1,0 +1,5 @@
+DB_NAME=knufestival2019
+DB_USER=knufestival2019
+DB_PASSWORD=knufestival2019
+DB_HOST=db
+DB_PORT=5432

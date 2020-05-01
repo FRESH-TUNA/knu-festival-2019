@@ -30,7 +30,3 @@ services:
       - -c
       - |
         supervisord
-
-
-
-  
