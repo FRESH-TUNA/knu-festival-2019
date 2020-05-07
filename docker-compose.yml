@@ -11,7 +11,7 @@ services:
 
   web:
     env_file:
-      - web/envs/.dev
+      - web/config/credentials/.dev
     container_name: knufestival2019-web
     build:
       context: ./web

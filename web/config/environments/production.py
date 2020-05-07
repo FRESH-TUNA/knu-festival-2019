@@ -6,7 +6,7 @@ DEBUG = True
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-ROOT_URLCONF = 'festival.urls.production'
+ROOT_URLCONF = 'config.urls.production'
 
 ALLOWED_HOSTS = [os.environ['WEB_HOST']]
 
@@ -23,4 +23,3 @@ DATABASES = {
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
-

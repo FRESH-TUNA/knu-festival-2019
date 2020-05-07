@@ -9,3 +9,15 @@ RUN apt update \
     
 RUN pip3 --no-cache-dir install -r requirements.txt
 ENTRYPOINT ["sh", "./scripts/dev/entrypoint.sh"]
+
+# production
+FROM lunacircle4/python:3.8.1 as prod
+WORKDIR /web
+COPY ./* ./
+RUN apt update \
+    && apt install -y postgresql postgresql-contrib libpq-dev supervisor \         
+    && rm -rf /var/lib/apt/lists/* \
+    && cp ./scripts/prod/supervisord_was.conf /etc/supervisor/conf.d
+    
+RUN pip3 --no-cache-dir install -r requirements.txt
+ENTRYPOINT ["sh", "./scripts/prod/entrypoint.sh"]
