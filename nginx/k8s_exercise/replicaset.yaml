@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: knufestival2019-nginx-replicaset
@@ -7,3 +7,14 @@ spec:
   selector:
     matchLabels:
       app: knufestival2019-nginx-pod
+  template:
+    metadata:
+      name: knufestival2019-nginx-pod
+      labels:
+        app: knufestival2019-nginx-pod
+    spec:
+      containers:
+      - name: knufestival2019-nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
