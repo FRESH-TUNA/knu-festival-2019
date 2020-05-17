@@ -28,6 +28,17 @@ DATABASES = {
     }
 }
 
+# sass settings
+SASS_PROCESSOR_ENABLED = True
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder'
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,
