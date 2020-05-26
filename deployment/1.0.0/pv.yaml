@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: knufestival2019-db-pv
+spec:
+  capacity:
+    storage: 5Gi         # 이 볼륨의 크기는 5G입니다.
+  accessModes:
+    - ReadWriteMany    # 하나의 포드 (또는 인스턴스) 에 의해서만 마운트 될 수 있습니다.
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: <VOLUME_ID>

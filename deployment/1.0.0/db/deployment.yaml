@@ -1,0 +1,58 @@
+# apiVersion: v1
+# kind: secret
+# metadata:
+#   name: knufestival2019
+# data:
+#   mykey: yourvalue
+# ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: knufestival2019-db-pvc                 # 1. my-ebs-pvc라는 이름의 pvc 를 생성합니다.
+  namespace: production
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteMany       # 2.1 속성이 ReadWriteOnce인 퍼시스턴트 볼륨과 연결합니다.
+  resources:
+    requests:
+      storage: 5Gi          # 2.2 볼륨 크기가 최소 5Gi인 퍼시스턴트 볼륨과 연결합니다.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knufestival2019-db
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: knufestival2019-db
+  template:
+    metadata:
+      labels:
+        app: knufestival2019-db
+    spec:
+      containers:
+      - name: db
+        image: postgres:12.2-alpine
+    volumeMounts:
+      - name: ebs-volume
+        mountPath: /var/lib/postgresql/data
+  volumes:
+  - name : ebs-volume
+    persistentVolumeClaim:
+      claimName: knufestival2019-db-pvc    # 3. my-ebs-pvc라는 이름의 pvc를 사용합니다.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knufestival2019-db
+  namespace: production
+spec:
+  ports:
+    - name: knufestival2019-db-port
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: knufestival2019-db
+  type: ClusterIP
