@@ -35,6 +35,10 @@ spec:
       containers:
       - name: db
         image: postgres:12.2-alpine
+        envFrom:
+        - secretRef:
+            name: knufestival2019-db-env
+
     volumeMounts:
       - name: ebs-volume
         mountPath: /var/lib/postgresql/data
