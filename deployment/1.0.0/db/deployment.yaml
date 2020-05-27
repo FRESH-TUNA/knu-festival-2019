@@ -24,5 +24,19 @@ spec:
           mountPath: /var/lib/postgresql/data
       volumes:
       - name : knufestival2019-nfs-client
-          path: /
-          server: {NFS_SERVICE_IP}
+        nfs:
+          path: /exports
+          server: 10.107.98.35
+apiVersion: v1
+kind: Service
+metadata:
+  name: knufestival2019-db-service
+  namespace: production
+spec:
+  ports:
+    - name: knufestival2019-db-port
+      port: 5432
+      targetPort: 5432
+  selector:
+    app: knufestival2019-db
+  type: ClusterIP
