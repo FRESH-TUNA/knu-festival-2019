@@ -18,3 +18,6 @@ spec:
       containers:
       - name: web
         image: lunacircle4/knufestival2019:1.0.0
+        envFrom:
+        - secretRef:
+            name: knufestival2019-was-env
