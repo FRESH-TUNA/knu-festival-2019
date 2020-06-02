@@ -10,7 +10,7 @@ docker-compose build
 # migrate
 echo "2. db migrate"
 docker-compose up -d db
-docker-compose run --entrypoint="sh ./development/web_init.sh" web
+docker-compose run --entrypoint="sh ./deployment/develop/web_init.sh" web
 
 # finish
 docker-compose down
