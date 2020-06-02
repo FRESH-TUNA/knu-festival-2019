@@ -1,23 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: knu-festival
-
+  name: knu-festival-was
 spec:
   replicas: 2
   selector:
     matchLabels:
       app: knu-festival-was
-
   template:
     metadata:
       labels:
         app: knu-festival-was
-
     spec:
       containers:
       - name: web
         image: lunacircle4/knufestival2019:1.0.0
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo "wait for postgres";
+            until pg_isready -h knufestival2019-db-service; do
+              >&2 echo ".";
+              sleep 3;
+            done;
+            supervisord;
         envFrom:
         - secretRef:
             name: knufestival2019-was-env
