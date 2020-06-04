@@ -18,11 +18,10 @@ spec:
         image: lunacircle4/knufestival2019-nginx:latest
         volumeMounts:
         - name: knufestival2019-web-conf
-          mountPath: /etc/nginx
+          mountPath: /etc/nginx/nginx.conf
       volumes:
       - name: knufestival2019-web-conf
         configmap:
           name: knufestival2019-web-conf
           items:
           - key: nginx.conf
-            path: nginx.conf
