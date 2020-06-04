@@ -7,3 +7,4 @@ rm -rf ../web/static
 
 # finish
 docker build -t lunacircle4/knufestival2019-nginx:latest .
+rm -rf ./static
