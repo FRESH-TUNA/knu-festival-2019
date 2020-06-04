@@ -28,9 +28,9 @@ DATABASES = {
     }
 }
 
-# sass settings
+# sass settings #default로 static_root에 결과물을 저장한다.
 SASS_PROCESSOR_ENABLED = True
-
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'temp')
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',

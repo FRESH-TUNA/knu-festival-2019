@@ -3,7 +3,7 @@ version: "3.7"
 services:
   db:
     env_file: 
-      - development/credentials/db.env
+      - env/develop/db.env
     image: postgres:12.2-alpine
     container_name: knufestival2019-db
     volumes:
@@ -11,7 +11,7 @@ services:
 
   web:
     env_file:
-      - development/credentials/web.env
+      - env/develop/web.env
     container_name: knufestival2019-web
     build:
       context: ./web

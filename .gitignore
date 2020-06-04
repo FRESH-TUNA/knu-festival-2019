@@ -1,3 +1,4 @@
 ﻿db/volume/
 *.pyc
 env/
+temp/
