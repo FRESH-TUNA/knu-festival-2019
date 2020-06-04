@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: knufestival2019-was-service
+  namespace: production
+spec:
+  ports:
+    - name: knufestival2019-was-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: knu-festival-was
+  type: ClusterIP

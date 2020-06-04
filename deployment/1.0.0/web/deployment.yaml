@@ -15,23 +15,14 @@ spec:
     spec:
       containers:
       - name: knufestival2019-web
-        image: nginx:1.19.0-alpine
-        envFrom:
-        - secretRef:
-            name: knufestival2019-db-env
+        image: lunacircle4/knufestival2019-nginx:latest
         volumeMounts:
-        - name: knufestival2019-nfs-client
-          mountPath: /var/lib/postgresql/data
-apiVersion: v1
-kind: Service
-metadata:
-  name: knufestival2019-web-service
-  namespace: production
-spec:
-  ports:
-    - name: knufestival2019-web-port
-      port: 80
-      targetPort: 80
-  selector:
-    app: knufestival2019-web
-  type: NodePort
+        - name: knufestival2019-web-conf
+          mountPath: /etc/nginx
+      volumes:
+      - name: knufestival2019-web-conf
+        configmap:
+          name: knufestival2019-web-conf
+          items:
+          - key: nginx.conf
+            path: nginx.conf

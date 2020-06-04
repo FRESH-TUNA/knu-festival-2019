@@ -15,14 +15,6 @@ spec:
       containers:
       - name: web
         image: lunacircle4/knufestival2019:1.0.0
-        command: ["/bin/sh", "-c"]
-        args:
-          - echo "wait for postgres";
-            until pg_isready -h knufestival2019-db-service; do
-              >&2 echo ".";
-              sleep 3;
-            done;
-            supervisord;
         envFrom:
         - secretRef:
             name: knufestival2019-was-env
