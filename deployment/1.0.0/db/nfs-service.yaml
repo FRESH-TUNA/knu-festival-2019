@@ -15,6 +15,10 @@ spec:
       containers:
       - name: knufestival2019-nfs-server
         image: itsthenetwork/nfs-server-alpine:11-arm
+        env:
+        - name: SHARED_DIRECTORY
+        - value: "/exports"
+      value: "Warm greetings to"
         ports:
           - name: nfs
             containerPort: 2049
