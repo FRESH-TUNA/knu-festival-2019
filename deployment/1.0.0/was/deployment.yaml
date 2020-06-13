@@ -24,6 +24,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: knu-festival-migrator
+  namespace: production
 spec:
   template:
     spec:
