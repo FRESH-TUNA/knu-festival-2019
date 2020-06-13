@@ -19,11 +19,3 @@ spec:
         envFrom:
         - secretRef:
             name: knufestival2019-db-env
-        volumeMounts:
-        - name: knufestival2019-nfs-client
-          mountPath: /var/lib/postgresql/data
-      volumes:
-      - name : knufestival2019-nfs-client
-        nfs:
-          path: /exports
-          server: 10.107.98.35
