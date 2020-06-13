@@ -17,8 +17,7 @@ spec:
         image: itsthenetwork/nfs-server-alpine:11-arm
         env:
         - name: SHARED_DIRECTORY
-        - value: "/exports"
-      value: "Warm greetings to"
+          value: "/exports"
         ports:
           - name: nfs
             containerPort: 2049
