@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: knu-festival-was
+  namespace: production
 spec:
   replicas: 2
   selector:
@@ -18,3 +19,19 @@ spec:
         envFrom:
         - secretRef:
             name: knufestival2019-was-env
+---
+apiVersion: v1
+kind: EphemeralContainers
+metadata:
+  name: knu-festival-was-migrate
+  namespace: production
+ephemeralContainers:
+  - image: lunacircle4/knufestival2019:1.0.0
+    envFrom:
+    - secretRef:
+        name: knufestival2019-was-env
+    command: [
+      "python3 manage.py migrate --settings=config.environments.production"
+    ]
+    imagePullPolicy: "IfNotPresent"
+    name: "knu-festival-was-migrate"
