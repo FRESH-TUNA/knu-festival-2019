@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: knufestival2019-nfs-server
-        image: gcr.io/google_containers/volume-nfs:0.8
+        image: itsthenetwork/nfs-server-alpine:11-arm
         ports:
           - name: nfs
             containerPort: 2049
