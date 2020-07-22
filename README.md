@@ -26,8 +26,8 @@
 
 ## 4. 주요 소스 코드
 ### 1. 도커를 활용한 개발, 배포 환경
-```/logic/docker/development/Dockerfile``` [<a href="/web/docker/dev/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
-```/docker-compose.yml``` [<a href="/docker-compose.yml">이동</a>] 개발 환경 구동 파일<br/>
+```/logic/docker/development/Dockerfile``` [<a href="/logic/docker/development/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
+```docker-compose.yml``` [<a href="docker-compose.yml">이동</a>] 개발 환경 구동 파일<br/>
 ```/logic/config/environments/development.py``` [<a href="/logic/config/environments/development.py">이동</a>] 개발 settings
 <br/><br/>
 
