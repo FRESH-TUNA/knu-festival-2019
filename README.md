@@ -1,7 +1,7 @@
 # 2019 강원대학교 축제사이트, 머동머동!
 ![](./knufestival.jpg)
 <br/>
-<a href="https://www.knufesta2019.de/">https://www.knufesta2019.de/</a>
+<a href="http://www.knufesta2019.de/">http://www.knufesta2019.de/</a>
 ## 1. 만든사람들
 기서연 - 강원대 멋사 7기, 프론트엔드 개발 및 디자인<br/>
 김동원 - 강원대 멋사 7기, 풀스택 개발 및 PM<br/>
@@ -14,8 +14,8 @@
 하준혁 - 강원대 멋사 7기, 프론트엔드 개발 및 고문<br/>
 
 ## 2. 작동 환경
-* Python : 3.6.4
-* Django : 2.2.4
+* Python : 3.8.1
+* Django : 3.0.5
 
 
 ## 3. 웹서비스 주요기능
@@ -26,20 +26,12 @@
 
 ## 4. 주요 소스 코드
 ### 1. 도커를 활용한 개발, 배포 환경
-```/web/docker/dev/Dockerfile``` [<a href="/web/docker/dev/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
-```/web/dev/docker-compose.yml``` [<a href="/web/dev/docker-compose.yml">이동</a>] 개발 환경 작동 파일<br/>
-```/web/festival/settings/development.py``` [<a href="/web/festival/settings/development.py">이동</a>] 개발 settings
+```/logic/docker/development/Dockerfile``` [<a href="/logic/docker/development/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
+```docker-compose.yaml``` [<a href="docker-compose.yaml">이동</a>] 개발 환경 구동 파일<br/>
+```/logic/config/environments/development.py``` [<a href="/logic/config/environments/development.py">이동</a>] 개발 settings
 <br/><br/>
-```/docker-compose/prod/docker-compose.yml``` [<a href="/docker-compose/prod/docker-compose.yml">이동</a>] 배포 환경 작동파일<br/>
-```/web/festival/settings/development.py``` [<a href="/web/festival/settings/development.py">이동</a>] 배포 settings
-<br/><br/>
-```/pipeline_open.sh``` [<a href="/pipeline_open.sh">이동</a>] 배포 파이프라인
-<br/>
-```/deploy.sh``` [<a href="/deploy.sh">이동</a>] blue, green 배포 스크립트
 
-## 5. 파이프라인
-1. master 브랜치에 푸시한다.
-2. github가 docker hub로 hook을 보낸다.
-3. docker hub에서 이미지를 빌드한후 jenkins로 hook을 보낸다.
-4. jenkins에서 /pipeline_open.sh을 실행한다.
-5. deploy.sh를 실행하여 blue, green 배포를 실행한다.
+```/logic/docker/production/Dockerfile``` [<a href="/logic/docker/production/Dockerfile">이동</a>] 개발 환경을 위한 이미지<br/>
+```/deployment/production/1.0.0/docker-compose.yaml``` [<a href="/deployment/staging/1.0.0/docker-compose.yaml">이동</a>] 배포 환경 작동파일<br/>
+```/logic/config/environments/production.py``` [<a href="/logic/config/environments/production.py">이동</a>] 배포 settings
+<br/><br/>

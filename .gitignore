@@ -1,4 +1,8 @@
 ﻿db/volume/
-*.pyc
-env/
+__pycache__
+database/volume
 temp/
+env/
+!webserver/env
+static/
+media/

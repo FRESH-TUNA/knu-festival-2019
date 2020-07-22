@@ -1,0 +1,15 @@
+#!/bin/sh
+
+printf "postgres running check "
+
+until pg_isready -h database >/dev/null 2>&1; do  
+  printf "."
+  sleep 3
+done
+
+python3 /logic/manage.py migrate --settings=config.environments.staging
+python3 /logic/manage.py compilescss --settings=config.environments.staging
+python3 /logic/manage.py collectstatic --no-input --ignore=*.sass --settings=config.environments.staging
+python3 /logic/manage.py compilescss --delete-files --settings=config.environments.staging
+
+supervisord
