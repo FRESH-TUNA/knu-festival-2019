@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "wait for postgres"
+
+until pg_isready -h database; do
+  >&2 echo "."
+  sleep 3
+done
+
+python3 /logic/manage.py migrate --settings=config.environments.staging
+
+supervisord

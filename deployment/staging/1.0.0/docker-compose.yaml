@@ -1,20 +1,30 @@
-version: "3.7"
+version: "3.8"
 
 services:
-  db:
+  database:
     env_file: 
-      - ../env/develop/db.env
+      - ../../database/env/.staging/.env
     image: postgres:12.2-alpine
-    container_name: knufestival2019-db
+    container_name: database.knufesta2019
     volumes:
-      - ./db/volume:/var/lib/postgresql/data
+      - database.knufesta2019:/var/lib/postgresql/data
 
-  web:
+  logic:
     env_file:
-      - ../../envs/soho_1.0.0/web.env
-    container_name: knufestival2019-web
-    image: lunacircle4/knufestival2019:1.0.0
-    volumes:
-      - "./web:/web"
+      - ../../logic/env/.staging/.env
+    image: lunacircle4/logic.knufesta2019:1.0.0-test
+    container_name: logic.knufesta2019
+
+  webserver:
+    image: nginx:1.19.1 # nginx 서비스에서 사용할 도커 이미지
     ports:
-      - "8000:8000"
+      - "80:80"
+    volumes:
+      - ../../webserver/env/.staging/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - static:/knufesta2019/static  
+      - media:/knufesta2019/media
+    depends_on: # 서비스 간의 종속성 표현
+      - logic
+
+volumes:
+  database.knufesta2019:
