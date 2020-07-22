@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# make app envs
+printf "enter database name: ";
+read db_name;
+printf "enter username of database: ";
+read db_user;
+printf "enter password of database: ";
+read db_password;
+
+echo "DB_NAME=${db_name}"\ >> $(pwd)/was/env/development/.env;
+echo "DB_USER=${db_user}"\ >> $(pwd)/was/env/development.env;
+echo "DB_PASSWORD=${db_password}"\ >> $(pwd)/was/env/development/.env;
+echo "DB_HOST=database"\ >> $(pwd)/was/env/development/.env;
+echo "DB_PORT=5432"\  >> $(pwd)/was/env/development/.env;
+echo "ALLOWED_HOSTS=*"\ >> $(pwd)/was/env/development/.env;
+
+## generate secret key
+seed='<=>|-,;:!/.()[]{}*\&#%+012345689abcdefghiklmnopqrstuvwxyz';
+secret_key=''
+for i in $(awk '
+  BEGIN {	
+    srand();
+    for (i=0; i<50; i++) 
+      printf("%d ", 56 * rand() + 1);
+  }
+'); do 
+  secret_key="${secret_key}$(echo $seed | cut -c $i)"
+done
+echo "SECRET_KEY=$secret_key"\ >> $(pwd)/was/env/development/.env;
+
+# make database envs
+echo "POSTGRES_DB=${db_name}"\ >> $(pwd)/database/env/development/.env;
+echo "POSTGRES_USER=${db_user}"\ >> $(pwd)/database/env/development/.env;
+echo "POSTGRES_PASSWORD=${db_password}"\ >> $(pwd)/database/env/development/.env;
+
+
+# development image build
+echo "1. development image build"
+docker-compose build
+
+
+# database migrate
+echo "2. database migrate"
+docker-compose up -d database
+docker-compose run --entrypoint="sh ./docker/development/init.sh" app
+
+
+# project start
+echo "development environment finished!"
+echo "project start!"
+docker-compose up

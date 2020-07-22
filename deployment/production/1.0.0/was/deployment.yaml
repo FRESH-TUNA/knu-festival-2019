@@ -37,4 +37,3 @@ spec:
             name: knufestival2019-was-env
       restartPolicy: Never
   backoffLimit: 4
-

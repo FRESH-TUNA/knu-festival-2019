@@ -4,6 +4,7 @@ metadata:
   name: knufestival2019-web
   namespace: production
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: knufestival2019-web

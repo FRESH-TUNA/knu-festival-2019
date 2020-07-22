@@ -1,4 +1,3 @@
 ﻿db/volume/
-*.pyc
-env/
-temp/
+__pycache__
+database/volume
