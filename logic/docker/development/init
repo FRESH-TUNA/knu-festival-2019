@@ -1,9 +1,12 @@
 #!/bin/sh
 
-until pg_isready -h db; do
-  >&2 echo "postgres is unavailable - sleeping"
+printf "postgres running check ..."
+until pg_isready -h database > /dev/null 2>&1; do  
+  printf "."
   sleep 3
 done
+printf '\npostgres loaded! \n start migration ...\n'
 
-python3 /web/manage.py makemigrations
-python3 /web/manage.py migrate
+python3 /logic/manage.py makemigrations
+python3 /logic/manage.py migrate
+echo "migration success!"

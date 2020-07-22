@@ -1,6 +1,6 @@
 # development
-FROM lunacircle4/python:3.8.1 as dev
-WORKDIR /web
+FROM lunacircle4/python:3.8.1
+WORKDIR /logic
 EXPOSE 8000
 COPY requirements.txt ./
 RUN apt update \
@@ -8,4 +8,4 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
     
 RUN pip3 --no-cache-dir install -r requirements.txt
-ENTRYPOINT ["sh", "./docker/dev/entrypoint.sh"]
+ENTRYPOINT ["./docker/development/service"]

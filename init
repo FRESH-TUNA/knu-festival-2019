@@ -8,12 +8,12 @@ read db_user;
 printf "enter password of database: ";
 read db_password;
 
-echo "DB_NAME=${db_name}"\ >> $(pwd)/logic/env/development/.env;
-echo "DB_USER=${db_user}"\ >> $(pwd)/logic/env/development/.env;
-echo "DB_PASSWORD=${db_password}"\ >> $(pwd)/logic/env/development/.env;
-echo "DB_HOST=database"\ >> $(pwd)/logic/env/development/.env;
-echo "DB_PORT=5432"\  >> $(pwd)/logic/env/development/.env;
-echo "ALLOWED_HOSTS=*"\ >> $(pwd)/logic/env/development/.env;
+echo "DB_NAME=${db_name}"\ >> $(pwd)/logic/env/.development/.env;
+echo "DB_USER=${db_user}"\ >> $(pwd)/logic/env/.development/.env;
+echo "DB_PASSWORD=${db_password}"\ >> $(pwd)/logic/env/.development/.env;
+echo "DB_HOST=database"\ >> $(pwd)/logic/env/.development/.env;
+echo "DB_PORT=5432"\  >> $(pwd)/logic/env/.development/.env;
+echo "ALLOWED_HOSTS=*"\ >> $(pwd)/logic/env/.development/.env;
 
 ## generate secret key
 seed='<=>|-,;:!/.()[]{}*\&#%+012345689abcdefghiklmnopqrstuvwxyz';
@@ -27,12 +27,12 @@ for i in $(awk '
 '); do 
   secret_key="${secret_key}$(echo $seed | cut -c $i)"
 done
-echo "SECRET_KEY=$secret_key"\ >> $(pwd)/logic/env/development/.env;
+echo "SECRET_KEY=$secret_key"\ >> $(pwd)/logic/env/.development/.env;
 
 # make database envs
-echo "POSTGRES_DB=${db_name}"\ >> $(pwd)/database/env/development/.env;
-echo "POSTGRES_USER=${db_user}"\ >> $(pwd)/database/env/development/.env;
-echo "POSTGRES_PASSWORD=${db_password}"\ >> $(pwd)/database/env/development/.env;
+echo "POSTGRES_DB=${db_name}"\ >> $(pwd)/database/env/.development/.env;
+echo "POSTGRES_USER=${db_user}"\ >> $(pwd)/database/env/.development/.env;
+echo "POSTGRES_PASSWORD=${db_password}"\ >> $(pwd)/database/env/.development/.env;
 
 
 # development image build
@@ -43,7 +43,7 @@ docker-compose build
 # database migrate
 echo "2. database migrate"
 docker-compose up -d database
-docker-compose run --entrypoint="sh ./docker/development/init.sh" app
+docker-compose run --entrypoint="./docker/development/init" logic
 
 
 # project start

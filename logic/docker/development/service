@@ -2,9 +2,12 @@
 
 EXPOSE_PORT=8000
 
-until pg_isready -h db; do
-  >&2 echo "postgres is unavailable - sleeping"
+printf "postgres running check "
+
+until pg_isready -h database >/dev/null 2>&1; do  
+  printf "."
   sleep 3
 done
 
-python3 /web/manage.py runserver 0.0.0.0:${EXPOSE_PORT}
+printf '\npostgres loaded! \ndevelopment server start!\n'
+python3 /logic/manage.py runserver 0.0.0.0:$EXPOSE_PORT

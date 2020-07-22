@@ -1,22 +1,22 @@
-version: "3.7"
+version: "3.8"
 
 services:
-  db:
+  database:
     env_file: 
-      - env/develop/db.env
+      - database/env/.development/.env
     image: postgres:12.2-alpine
-    container_name: knufestival2019-db
+    container_name: database.knufesta2019
     volumes:
-      - ./db/volume:/var/lib/postgresql/data
+      - ./database/volume:/var/lib/postgresql/data
 
-  web:
+  logic:
     env_file:
-      - env/develop/web.env
-    container_name: knufestival2019-web
+      - logic/env/.development/.env
+    container_name: logic.knufesta2019
     build:
-      context: ./web
-      dockerfile: ./docker/dev/Dockerfile
+      context: ./logic
+      dockerfile: docker/development/Dockerfile
     volumes:
-      - "./web:/web"
+      - "./logic:/logic"
     ports:
       - "8000:8000"
