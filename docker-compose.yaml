@@ -7,7 +7,7 @@ services:
     image: postgres:12.2-alpine
     container_name: database.knufesta2019
     volumes:
-      - ./database/volume:/var/lib/postgresql/data
+      - database.knufesta2019:/var/lib/postgresql/data
 
   logic:
     env_file:
@@ -20,3 +20,6 @@ services:
       - "./logic:/logic"
     ports:
       - "8000:8000"
+
+volumes:
+  database.knufesta2019:

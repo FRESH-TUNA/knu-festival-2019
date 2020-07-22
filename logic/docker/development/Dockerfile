@@ -8,4 +8,4 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
     
 RUN pip3 --no-cache-dir install -r requirements.txt
-ENTRYPOINT ["./docker/development/service"]
+ENTRYPOINT ["sh", "./docker/development/service"]

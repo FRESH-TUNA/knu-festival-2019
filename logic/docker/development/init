@@ -1,6 +1,6 @@
 #!/bin/sh
-
 printf "postgres running check ..."
+
 until pg_isready -h database > /dev/null 2>&1; do  
   printf "."
   sleep 3

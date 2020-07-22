@@ -42,8 +42,9 @@ docker-compose build
 
 # database migrate
 echo "2. database migrate"
+docker volume create database.knufesta2019
 docker-compose up -d database
-docker-compose run --entrypoint="./docker/development/init" logic
+docker-compose run --entrypoint="sh ./docker/development/init" logic
 
 
 # project start
