@@ -1,3 +1,5 @@
 ﻿db/volume/
 __pycache__
 database/volume
+temp/
+env/
