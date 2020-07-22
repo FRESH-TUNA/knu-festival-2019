@@ -3,7 +3,7 @@ version: "3.8"
 services:
   database:
     env_file: 
-      - ../../database/env/.staging/.env
+      - ../../../database/env/.staging/.env
     image: postgres:12.2-alpine
     container_name: database.knufesta2019
     volumes:
@@ -11,18 +11,21 @@ services:
 
   logic:
     env_file:
-      - ../../logic/env/.staging/.env
+      - ../../../logic/env/.staging/.env
     image: lunacircle4/logic.knufesta2019:1.0.0-test
     container_name: logic.knufesta2019
+    volumes:
+      - ../../../webserver/static:/logic/static  
+      - ../../../webserver/media:/logic/media
 
   webserver:
     image: nginx:1.19.1 # nginx 서비스에서 사용할 도커 이미지
     ports:
       - "80:80"
     volumes:
-      - ../../webserver/env/.staging/nginx.conf:/etc/nginx/conf.d/nginx.conf
-      - static:/knufesta2019/static  
-      - media:/knufesta2019/media
+      - ../../../webserver/env/.staging/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ../../../webserver/static:/knufesta2019/static  
+      - ../../../webserver/media:/knufesta2019/media
     depends_on: # 서비스 간의 종속성 표현
       - logic
 

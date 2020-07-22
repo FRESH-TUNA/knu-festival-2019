@@ -8,6 +8,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 ROOT_URLCONF = 'config.urls.production'
 
-ALLOWED_HOSTS = [os.environ['WEB_HOST']]
-
 WSGI_APPLICATION = 'config.wsgi.production'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

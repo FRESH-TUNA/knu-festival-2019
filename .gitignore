@@ -3,3 +3,6 @@ __pycache__
 database/volume
 temp/
 env/
+!webserver/env
+static/
+media/

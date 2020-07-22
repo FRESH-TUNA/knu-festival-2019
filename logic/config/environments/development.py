@@ -14,7 +14,8 @@ SECRET_KEY = os.environ['SECRET_KEY']
 ROOT_URLCONF = 'config.urls.development'
 #media 설정
 
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # sass settings #default로 static_root에 결과물을 저장한다.
 SASS_PROCESSOR_ENABLED = True
@@ -25,7 +26,7 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder'
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # LOGGING = {
 #     'version': 1,
