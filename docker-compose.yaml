@@ -5,14 +5,14 @@ services:
     env_file: 
       - database/env/.development/.env
     image: postgres:12.2-alpine
-    container_name: database.knufesta2019
+    container_name: database.development.knufesta2019
     volumes:
-      - database.knufesta2019:/var/lib/postgresql/data
+      - database.development.knufesta2019:/var/lib/postgresql/data
 
   logic:
     env_file:
       - logic/env/.development/.env
-    container_name: logic.knufesta2019
+    container_name: logic.development.knufesta2019
     build:
       context: ./logic
       dockerfile: docker/development/Dockerfile
@@ -22,4 +22,4 @@ services:
       - "8000:8000"
 
 volumes:
-  database.knufesta2019:
+  database.development.knufesta2019:
