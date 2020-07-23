@@ -11,7 +11,7 @@ services:
 
   logic:
     env_file:
-      - ../../../logic/env/.staging/.env
+      - ../../../logic/env/.production/.env
     image: lunacircle4/logic.knufesta2019:1.0.0
     build:
       context: ../../../logic
@@ -27,7 +27,7 @@ services:
       - "80:80"
     container_name: webserver.production.knufesta2019
     volumes:
-      - ../../../webserver/env/.staging/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ../../../webserver/env/.production/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ../../../webserver/static:/knufesta2019/static  
       - ../../../webserver/media:/knufesta2019/media
     depends_on: # 서비스 간의 종속성 표현
