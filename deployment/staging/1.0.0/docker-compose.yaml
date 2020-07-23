@@ -35,3 +35,4 @@ services:
 
 volumes:
   database.staging.knufesta2019:
+    external: true

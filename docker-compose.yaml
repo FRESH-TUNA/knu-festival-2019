@@ -23,3 +23,4 @@ services:
 
 volumes:
   database.development.knufesta2019:
+    external: true
