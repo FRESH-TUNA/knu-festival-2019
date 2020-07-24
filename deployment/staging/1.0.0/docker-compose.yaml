@@ -40,7 +40,7 @@ services:
       - staging.knufesta2019
 
 volumes:
-  staging.development.knufesta2019:
+  database.staging.knufesta2019:
     external: true
 
 networks:

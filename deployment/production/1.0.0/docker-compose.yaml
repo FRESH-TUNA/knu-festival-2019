@@ -40,7 +40,7 @@ services:
       - production.knufesta2019
 
 volumes:
-  production.development.knufesta2019:
+  database.production.knufesta2019:
     external: true
 
 networks:
