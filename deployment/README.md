@@ -2,12 +2,14 @@
 배포를 위해 필요한 docker-compose 파일들이 버전별로 정리되어있는 폴더이다.
 
 ## 1. 간단한 배포과정
-만약 처음 배포를 진행하는것이라면 데이터베이스를 위한 볼륨을 생성해줘야하고 환경에 따라  다음명령어를 입력하여 볼륨을 생성할수 있다.
+만약 처음 배포를 진행하는것이라면 데이터베이스를 위한 볼륨과 네트워크를 생성해줘야한다. 환경에 따라 다음명령어를 입력하여 볼륨과 네트워크를 생성할수 있다.
 ```sh
 # 테스트환경 볼륨
+docker network create staging.knufesta2019
 docker volume create database.staging.knufesta2019
 
 # 실제 환경 볼륨
+docker network create production.knufesta2019
 docker volume create database.production.knufesta2019
 ```
 

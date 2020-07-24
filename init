@@ -35,17 +35,18 @@ echo "POSTGRES_USER=${db_user}"\ >> $(pwd)/database/env/.development/.env;
 echo "POSTGRES_PASSWORD=${db_password}"\ >> $(pwd)/database/env/.development/.env;
 
 
+# network, volume create
+docker network create development.knufesta2019
+docker volume create database.development.knufesta2019
+
 # development image build
 echo "1. development image build"
 docker-compose build
 
-
 # database migrate
 echo "2. database migrate"
-docker volume create database.development.knufesta2019
 docker-compose up -d database
 docker-compose run --entrypoint="sh ./docker/development/init" logic
-
 
 # project start
 echo "development environment finished!"

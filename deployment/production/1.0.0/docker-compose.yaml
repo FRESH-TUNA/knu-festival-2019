@@ -8,6 +8,8 @@ services:
     container_name: database.production.knufesta2019
     volumes:
       - database.production.knufesta2019:/var/lib/postgresql/data
+    networks:
+      - production.knufesta2019
 
   logic:
     env_file:
@@ -20,6 +22,8 @@ services:
     volumes:
       - ../../../webserver/static:/logic/static  
       - ../../../webserver/media:/logic/media
+    networks:
+      - production.knufesta2019
 
   webserver:
     image: nginx:1.19.1 # nginx 서비스에서 사용할 도커 이미지
@@ -32,7 +36,13 @@ services:
       - ../../../webserver/media:/knufesta2019/media
     depends_on: # 서비스 간의 종속성 표현
       - logic
+    networks:
+      - production.knufesta2019
 
 volumes:
-  database.production.knufesta2019:
+  production.development.knufesta2019:
+    external: true
+
+networks:
+  production.knufesta2019:
     external: true
