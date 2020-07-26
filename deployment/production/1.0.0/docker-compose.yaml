@@ -24,6 +24,11 @@ services:
       - ../../../webserver/media:/logic/media
     networks:
       - production.knufesta2019
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "20m"
 
   webserver:
     image: nginx:1.19.1 # nginx 서비스에서 사용할 도커 이미지
@@ -38,6 +43,11 @@ services:
       - logic
     networks:
       - production.knufesta2019
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "20m"
 
 volumes:
   database.production.knufesta2019:
