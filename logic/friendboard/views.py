@@ -1,61 +1,50 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from friendboard.models import Post, Comment
 from friendboard.forms import PostForm, CommentForm
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, DeleteView
 import logging
 # 술친구 views.py
 
 class FriendBoardList(ListView):
-    queryset = Post.objects.all()
-    context_object_name = "post_list"
-    paginate_by = 10
-    template_name = 'friendboard.html'
+    model = Post
+    paginate_by = 5
+    # context_object_name = "post_list" # default는 object_list, paginate 적용시 page_obj도 가능
+    # 생략되어 있음 template_name = 'friendboard/post_list.html'
 
     def get_context_data(self, **kwargs):
-        paginator = Paginator(
-            super().get_queryset(), 
-            self.paginate_by)
-        page = self.request.GET.get('page')
-        return {self.context_object_name: paginator.get_page(page)}
+        context = super().get_context_data(**kwargs)
+        context['post_list'] = context.pop('page_obj', [])
+        return context
 
-## function_based_view
-# def friendboard(request):
-#     post_list = Post.objects.all()
-#     paginator = Paginator(post_list, 10) # Show 25 contacts per page
-#     page = request.GET.get('page')
-#     post_list = paginator.get_page(page)
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('/friendboard/')
-#     else:
-#         form = PostForm()
-#     return render(request,'friendboard.html',{'post_list':post_list,'form':form})
+class FriendBoardCreateView(CreateView):
+    model = Post
+    fields = ['content', 'password']
+    success_url = reverse_lazy('friendboard:list')
+    
+    def form_valid(self, form):
+        super().form_valid(form)
+        messages.info(self.request, "친구 찾기를 시작했습니다.")
+        return HttpResponseRedirect(self.get_success_url())
 
-def post_create(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/friendboard/')
-    else:
-        form = PostForm()
-    return render(request, 'friendboard.html',{'forms':forms})
+class FriendBoardDeleteView(DeleteView):
+    model = Post
+    success_url = reverse_lazy('friendboard:list')
 
-def post_delete(request, pk):
-    valpw = request.POST['valpw']
-    post = Post.objects.get(pk=pk)
-    if post.password == valpw :
-        post.delete()
-        messages.info(request, '게시물 삭제에 성공했습니다.')
-    else :
-        messages.error(request, '패스워드가 다릅니다.')
-    return redirect('/friendboard/')
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        valpw = request.POST['valpw']
 
+        if self.object.password == valpw:
+            self.object.delete()
+            messages.info(request, '게시물 삭제에 성공했습니다.')
+        else:
+            messages.error(request, '패스워드가 다릅니다.')
+
+        return HttpResponseRedirect(self.get_success_url())
 
 class FriendBoardDetail(DetailView):
     model = Post.objects.all()
