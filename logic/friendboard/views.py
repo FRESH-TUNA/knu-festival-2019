@@ -6,10 +6,9 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView
-import logging
 # 술친구 views.py
 
-class FriendBoardList(ListView):
+class FriendBoardPostListView(ListView):
     model = Post
     paginate_by = 5
     # context_object_name = "post_list" # default는 object_list, paginate 적용시 page_obj도 가능
@@ -20,7 +19,7 @@ class FriendBoardList(ListView):
         context['post_list'] = context.pop('page_obj', [])
         return context
 
-class FriendBoardCreateView(CreateView):
+class FriendBoardPostCreateView(CreateView):
     model = Post
     fields = ['content', 'password']
     success_url = reverse_lazy('friendboard:list')
@@ -30,7 +29,7 @@ class FriendBoardCreateView(CreateView):
         messages.info(self.request, "친구 찾기를 시작했습니다.")
         return HttpResponseRedirect(self.get_success_url())
 
-class FriendBoardDeleteView(DeleteView):
+class FriendBoardPostDeleteView(DeleteView):
     model = Post
     success_url = reverse_lazy('friendboard:list')
 
@@ -46,27 +45,15 @@ class FriendBoardDeleteView(DeleteView):
 
         return HttpResponseRedirect(self.get_success_url())
 
-class FriendBoardDetail(DetailView):
-    model = Post.objects.all()
-    context_object_name = "post_list"
-    paginate_by = 10
-    template_name = 'friendboard.html'
-
+class FriendBoardPostDetailView(DetailView):
+    model = Post
+    # context_object_name = "post"
+    # template_name = 'friendboard/post_detail.html'
+    
     def get_context_data(self, **kwargs):
-        paginator = Paginator(
-            super().get_queryset(), 
-            self.paginate_by)
-        page = self.request.GET.get('page')
-        return {self.context_object_name: paginator.get_page(page)}
-
-def detail(request, pk):
-    try:
-        post = Post.objects.get(pk=pk)
-    except Post.DoesNotExist:
-        raise Http404("Post does not exist")
-    form = CommentForm()
-    return render(request, 'friendboardDetail.html', {'post':post, 'form':form})
-
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentForm()
+        return context
 
 def createcomment(request, pk):
     post = get_object_or_404(Post, pk=pk)
