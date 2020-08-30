@@ -54,15 +54,3 @@ class FriendBoardPostDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
         return context
-
-def createcomment(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.post = post
-            comment.save()
-            return redirect('friendboard:detail', pk=post.pk)
-    else:
-        raise Http404("Wrong Access")

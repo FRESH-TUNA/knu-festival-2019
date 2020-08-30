@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import (
+from .views.posts import (
     FriendBoardPostListView, 
     FriendBoardPostCreateView, 
     FriendBoardPostDeleteView,
     FriendBoardPostDetailView,
-    createcomment
 )
+from .views.posts.comments import FriendBoardPostsCommentsCreateView
+from .views.comments.comments import FriendBoardCommentsCommentsCreateView
 
 # 술친구 urls.py
 
@@ -17,5 +18,6 @@ urlpatterns = [
     path('<int:pk>/delete', FriendBoardPostDeleteView.as_view(), name="delete"),
     path('', FriendBoardPostListView.as_view(), name="list"),
     path('<int:pk>/', FriendBoardPostDetailView.as_view(), name="detail"),
-    path('<int:pk>/comments', createcomment, name="createcomment"),
+    path('<int:pk>/comments', FriendBoardPostsCommentsCreateView.as_view(), name="createcomment"),
+    path('comments/<int:pk>/comments', FriendBoardPostsCommentsCreateView.as_view(), name="createcommentscomment"),
 ]

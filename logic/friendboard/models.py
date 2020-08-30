@@ -15,5 +15,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
+    parent = models.ForeignKey('Comment', on_delete=models.CASCADE, related_name='parent_comments', null=True)
+    # depth를 제한할 필요성이 있을때 사용한다.
+    depth = models.IntegerField(default=0)
     content = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)

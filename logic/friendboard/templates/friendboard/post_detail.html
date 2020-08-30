@@ -44,6 +44,10 @@
             <div class="comment">
                 <p class="detail-comment">{{ comment.content|linebreaks }}</p>
                 <div class="detail-comment-date">{{ comment.created_at }}</div>
+                <div class="buttons">
+                    <button id="cmtBtn{{post.pk}}" onclick="addcomment(event, '{{post.pk}}')" class="btn-addcmt"></button>
+                    <button id="delBtn{{post.pk}}" onclick="delpost(event, '{{post.pk}}')"></button>
+                </div>
             </div>
         {% endfor %}
         </div>
@@ -62,6 +66,33 @@
             </form>
         </div>
         <div id="cmtModal{{post.pk}}" class="modal">
+            <form action="{% url 'friendboard:createcomment' post.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-content addcmt-body">
+                    <div class="addcmt-header">
+                        <p>댓글 작성</p>
+                        <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
+                    </div>                                                          
+                    <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
+                    <button type="submit" class="btn btn-primary">확인</button>
+                </div>
+            </form>
+        </div>
+        <div id="delNestedModal" class="modal">
+            <form action="{% url 'friendboard:delete' post.pk %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-content delete-body">
+                    <div class="delete-header">
+                        <p>삭제하기</p>
+                        <span class="close" id="delcls{{post.pk}}">&times;</span>     
+                    </div>                                                          
+                    <p>글 등록시 입력 한 비밀번호 입력하세요</p>
+                    <input name="valpw" type="password">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </div>
+            </form>
+        </div>
+        <div id="cmtNestedModal" class="modal">
             <form action="{% url 'friendboard:createcomment' post.pk %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-content addcmt-body">
