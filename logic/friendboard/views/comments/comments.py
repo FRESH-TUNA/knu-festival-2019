@@ -9,22 +9,45 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView
 
 class FriendBoardCommentsCommentsCreateView(CreateView):
     form_class = CommentForm
-    model = Comment
     # fields = ['content', 'password']
-    
+    model = Comment
+
+    def get_parent_object(self):
+        return self.model.objects.get(pk=self.kwargs['pk'])
+
     def get_success_url(self):
-        return reverse_lazy('friendboard:detail', kwargs={'pk': self.kwargs['pk']})
+        return reverse_lazy('friendboard:detail', kwargs={'pk': self.get_parent_object().post.pk})
 
     def form_valid(self, form):
-        parent_comment = self.model.objects.get(pk=self.kwargs['pk'])
+        parent_comment = self.get_parent_object()
         form = self.get_form_class()(self.request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.parent = parent_comment
-            comment.depth = parent_comment.depth + 1
             comment.post = parent_comment.post
             comment.save()
             messages.info(self.request, "댓글 작성에 성공했습니다.")
             return HttpResponseRedirect(self.get_success_url())
         else:
             raise Http404("Wrong Access")
+
+class FriendBoardCommentsCommentsDeleteView(DeleteView):
+    model = Comment
+
+    def get_parent_object(self):
+        return self.model.objects.get(pk=self.kwargs['parent_pk'])
+
+    def get_success_url(self):
+        return reverse_lazy('friendboard:detail', kwargs={'pk': self.get_parent_object().post.pk})
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        valpw = request.POST['valpw']
+
+        if self.object.password == valpw:
+            self.object.delete()
+            messages.info(request, '게시물 삭제에 성공했습니다.')
+        else:
+            messages.error(request, '패스워드가 다릅니다.')
+
+        return HttpResponseRedirect(self.get_success_url())

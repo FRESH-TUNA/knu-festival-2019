@@ -92,11 +92,9 @@
     border: none;
 }
 
-/* .boardBody .buttons > button{
-    width: 80px;
-    height: 80px;
-    background-color: antiquewhite;
-} */
+.boardBody .buttons > button.btn-addcmt {
+    background-image: url("https://image.flaticon.com/icons/svg/1380/1380338.svg");
+}
 
 .boardBody .alert { margin-top: 20px; }
 
@@ -418,11 +416,22 @@
     justify-content: flex-end;
 }
 
+.detail-container .board-detail-comments {
+    display: flex;
+    flex-flow: column;
+    align-items: flex-end;
+}
+
 .detail-container .board-detail-comments .comment {
     background-color: #FFF5FF;
     padding: 2%;
     border-radius: 10px;
     margin-top: 10px;
+    width: 100%;
+}
+
+.detail-container .board-detail-comments .comment.nested {
+    width: 90%;   
 }
 
 .detail-container .board-detail img{

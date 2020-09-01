@@ -11,7 +11,9 @@ class Post(models.Model):
         
     def __str__ (self):
         return self.content
-
+    
+    def root_comments(self):
+        return self.comments.filter(parent__isnull=True).all()
 
 class Comment(models.Model):
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
@@ -20,3 +22,9 @@ class Comment(models.Model):
     depth = models.IntegerField(default=0)
     content = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def overview(self):
+        if len(self.content) > 10:
+            return "{}...".format(self.content[:10])
+        else:
+            return self.content

@@ -12,7 +12,7 @@ class FriendBoardPostListView(ListView):
     model = Post
     paginate_by = 5
     # context_object_name = "post_list" # default는 object_list, paginate 적용시 page_obj도 가능
-    # 생략되어 있음 template_name = 'friendboard/post_list.html'
+    template_name = 'friendboard/posts/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,8 +48,8 @@ class FriendBoardPostDeleteView(DeleteView):
 class FriendBoardPostDetailView(DetailView):
     model = Post
     # context_object_name = "post"
-    # template_name = 'friendboard/post_detail.html'
-    
+    template_name = 'friendboard/posts/show.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()

@@ -40,15 +40,26 @@
         </div>
         <hr>
         <div class="board-detail-comments">
-        {% for comment in post.comments.all %}
+        {% for root_comment in post.root_comments.all %}
             <div class="comment">
-                <p class="detail-comment">{{ comment.content|linebreaks }}</p>
-                <div class="detail-comment-date">{{ comment.created_at }}</div>
+                <p class="detail-comment">{{ root_comment.content|linebreaks }}</p>
+                <div class="detail-comment-date">{{ root_comment.created_at }}</div>
                 <div class="buttons">
-                    <button id="cmtBtn{{post.pk}}" onclick="addcomment(event, '{{post.pk}}')" class="btn-addcmt"></button>
+                    <button id="cmtBtn{{post.pk}}" onclick="add_nested_comment(event, '{{root_comment.pk}}')" class="btn-addcmt"></button>
                     <button id="delBtn{{post.pk}}" onclick="delpost(event, '{{post.pk}}')"></button>
                 </div>
             </div>
+            {% for comment in root_comment.parent_comments.all %}
+            <div class="comment nested">
+                <p class="detail-comment">RE: {{ root_comment.overview }}</p>
+                <p class="detail-comment">{{ comment.content|linebreaks }}</p>
+                <div class="detail-comment-date">{{ comment.created_at }}</div>
+                <div class="buttons">
+                    <button id="cmtBtn{{post.pk}}" onclick="add_nested_comment(event, '{{root_comment.pk}}')" class="btn-addcmt"></button>
+                    <button id="delBtn{{post.pk}}" onclick="delpost(event, '{{post.pk}}')"></button>
+                </div>
+            </div>
+            {% endfor %}
         {% endfor %}
         </div>
         <div id="delModal{{post.pk}}" class="modal">
@@ -78,27 +89,14 @@
                 </div>
             </form>
         </div>
-        <div id="delNestedModal" class="modal">
-            <form action="{% url 'friendboard:delete' post.pk %}" method="POST">
-                {% csrf_token %}
-                <div class="modal-content delete-body">
-                    <div class="delete-header">
-                        <p>삭제하기</p>
-                        <span class="close" id="delcls{{post.pk}}">&times;</span>     
-                    </div>                                                          
-                    <p>글 등록시 입력 한 비밀번호 입력하세요</p>
-                    <input name="valpw" type="password">
-                    <button type="submit" class="btn btn-danger">삭제</button>
-                </div>
-            </form>
-        </div>
+
         <div id="cmtNestedModal" class="modal">
-            <form action="{% url 'friendboard:createcomment' post.pk %}" method="POST">
+            <form action="#" method="POST">
                 {% csrf_token %}
                 <div class="modal-content addcmt-body">
                     <div class="addcmt-header">
                         <p>댓글 작성</p>
-                        <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
+                        <span class="close" id="cmtcls">&times;</span>     
                     </div>                                                          
                     <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
                     <button type="submit" class="btn btn-primary">확인</button>
@@ -149,6 +147,27 @@
                         }
                     }
                 event.stopPropagation()
+        }
+
+        function add_nested_comment(event, pk){
+            const modal = document.getElementById("cmtNestedModal");
+            const form = document.querySelector("#cmtNestedModal form");
+            const span = document.querySelector("#cmtNestedModal #cmtcls");   
+
+            modal.style.display = "block";
+
+            form.setAttribute('action', `/friendboard/comments/${pk}/comments`)
+
+            span.onclick = function() {
+                    modal.style.display = "none";
+                }
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+
+            event.stopPropagation()
         }
     </script>
 </div>

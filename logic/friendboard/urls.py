@@ -6,7 +6,10 @@ from .views.posts import (
     FriendBoardPostDetailView,
 )
 from .views.posts.comments import FriendBoardPostsCommentsCreateView
-from .views.comments.comments import FriendBoardCommentsCommentsCreateView
+from .views.comments.comments import (
+    FriendBoardCommentsCommentsCreateView,
+    FriendBoardCommentsCommentsDeleteView
+)
 
 # 술친구 urls.py
 
@@ -19,5 +22,6 @@ urlpatterns = [
     path('', FriendBoardPostListView.as_view(), name="list"),
     path('<int:pk>/', FriendBoardPostDetailView.as_view(), name="detail"),
     path('<int:pk>/comments', FriendBoardPostsCommentsCreateView.as_view(), name="createcomment"),
-    path('comments/<int:pk>/comments', FriendBoardPostsCommentsCreateView.as_view(), name="createcommentscomment"),
+    path('comments/<int:pk>/comments', FriendBoardCommentsCommentsCreateView.as_view(), name="create_nested_comment"),
+    path('comments/<int:parent_pk>/comments/<int:pk>', FriendBoardCommentsCommentsDeleteView.as_view(), name="delete_nested_comment")
 ]
