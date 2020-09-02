@@ -11,6 +11,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <div class="boardBody fontClass2">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'info' %}
+                <div class="alert alert-success alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {{ message }} 
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger alert-dismissible">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            {{ message }} 
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        
     <div class="board-header">
         <p class="title">술친구</p>
         <a href="{% url 'friendboard:list' %}">뒤로가기</a>
@@ -46,7 +62,7 @@
                 <div class="detail-comment-date">{{ root_comment.created_at }}</div>
                 <div class="buttons">
                     <button id="cmtBtn{{post.pk}}" onclick="add_nested_comment(event, '{{root_comment.pk}}')" class="btn-addcmt"></button>
-                    <button id="delBtn{{post.pk}}" onclick="delpost(event, '{{post.pk}}')"></button>
+                    <button id="delBtn{{post.pk}}" onclick="delete_comment(event, '{{root_comment.pk}}')"></button>
                 </div>
             </div>
             {% for comment in root_comment.parent_comments.all %}
@@ -56,7 +72,7 @@
                 <div class="detail-comment-date">{{ comment.created_at }}</div>
                 <div class="buttons">
                     <button id="cmtBtn{{post.pk}}" onclick="add_nested_comment(event, '{{root_comment.pk}}')" class="btn-addcmt"></button>
-                    <button id="delBtn{{post.pk}}" onclick="delpost(event, '{{post.pk}}')"></button>
+                    <button id="delBtn{{post.pk}}" onclick="delete_comment(event, '{{comment.pk}}')"></button>
                 </div>
             </div>
             {% endfor %}
@@ -76,6 +92,20 @@
                 </div>
             </form>
         </div>
+        <div id="del-comment-modal" class="modal">
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <div class="modal-content delete-body">
+                    <div class="delete-header">
+                        <p>삭제하기</p>
+                        <span class="close" id="delcls">&times;</span>     
+                    </div>                                                          
+                    <p>댓글 등록시 입력 한 비밀번호 입력하세요</p>
+                    <input name="valpw" type="password">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </div>
+            </form>
+        </div>
         <div id="cmtModal{{post.pk}}" class="modal">
             <form action="{% url 'friendboard:createcomment' post.pk %}" method="POST">
                 {% csrf_token %}
@@ -85,6 +115,7 @@
                         <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
                     </div>                                                          
                     <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
+                    <input type="password" name="password" maxlength="200" required="" id="id_password" placeholder="패스워드를 입력하세요">
                     <button type="submit" class="btn btn-primary">확인</button>
                 </div>
             </form>
@@ -99,6 +130,7 @@
                         <span class="close" id="cmtcls">&times;</span>     
                     </div>                                                          
                     <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
+                    <input type="password" name="password" maxlength="200" required="" id="id_password" placeholder="패스워드를 입력하세요">
                     <button type="submit" class="btn btn-primary">확인</button>
                 </div>
             </form>
@@ -157,6 +189,27 @@
             modal.style.display = "block";
 
             form.setAttribute('action', `/friendboard/comments/${pk}/comments`)
+
+            span.onclick = function() {
+                    modal.style.display = "none";
+                }
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+
+            event.stopPropagation()
+        }
+
+        function delete_comment(event, pk){
+            const modal = document.getElementById("del-comment-modal");
+            const form = document.querySelector("#del-comment-modal form");
+            const span = document.querySelector("#del-comment-modal #delcls");   
+
+            modal.style.display = "block";
+
+            form.setAttribute('action', `/friendboard/comments/${pk}`)
 
             span.onclick = function() {
                     modal.style.display = "none";

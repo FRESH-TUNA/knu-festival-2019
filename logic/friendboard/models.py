@@ -22,6 +22,7 @@ class Comment(models.Model):
     depth = models.IntegerField(default=0)
     content = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    password = models.CharField(max_length=50)
 
     def overview(self):
         if len(self.content) > 10:

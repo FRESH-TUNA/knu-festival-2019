@@ -14,7 +14,6 @@ class PostForm(forms.ModelForm):
         self.fields['content'].widget.attrs['class'] = 'form-control'
 
 class CommentForm(forms.ModelForm):
-    
     class Meta:
         model = Comment
-        fields = ('content',)
+        fields = ('content', 'password')
