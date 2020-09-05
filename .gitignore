@@ -6,3 +6,4 @@ env/
 !webserver/env
 static/
 media/
+*.env
