@@ -26,7 +26,15 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder'
 ]
 
+INSTALLED_APPS = INSTALLED_APPS + [
+    'debug_toolbar'
+]
 
+MIDDLEWARE = MIDDLEWARE + [
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
+]
+
+INTERNAL_IPS = ('172.19.0.1',)
 
 # LOGGING = {
 #     'version': 1,

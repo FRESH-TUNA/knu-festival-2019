@@ -1,12 +1,12 @@
 from lostboard.views import BaseGenericViewSet
-from lostboard.paginators.posts import LostboardPostsPaginator
+from lostboard.paginators.posts import PostsPaginator
 from lostboard.serializers.posts import (
-    LostboardPostsIndexSerializer
+    PostsListSerializer
 )
 from lostboard.models import Post
 
-class LostboardPostsViewSet(BaseGenericViewSet):
-    pagination_class = LostboardPostsPaginator
+class PostsViewSet(BaseGenericViewSet):
+    pagination_class = PostsPaginator
     model = Post
 
     def list(self, request, *args, **kwargs):
@@ -31,13 +31,6 @@ class LostboardPostsViewSet(BaseGenericViewSet):
         found = self.request.GET.get('found', True)
         if found == 'false': found=False
         return self.model.objects.filter(found=found)
-    
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return LostboardPostsIndexSerializer
-        else:
-            return LostboardPostsShowSerializer
-
 
 
 def find(request):
