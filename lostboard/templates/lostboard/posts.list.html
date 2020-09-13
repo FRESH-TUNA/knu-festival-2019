@@ -40,6 +40,8 @@
                 class="tab-link 
                 {% if 'found' in request.GET %}
                     {% ifequal request.GET.found 'True' %} current {% endifequal %}
+                {% else %}
+                    current
                 {% endif %}" 
                 data-tab="tab-1"
             >주웠어요</li></a>
@@ -93,6 +95,7 @@
 
         <div id="myModal{{post.pk}}" class="modal">
             <form action="{% url 'lostboard:posts-detail' post.id %}" method="POST">
+                {% include 'forms/delete.html' %}
                 {% csrf_token %}
                 <div class="modal-content delete-body">
                     <div class="delete-header">
@@ -118,7 +121,7 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{% url 'lostboard:posts-detail' pk=1 %}" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'lostboard:posts-list' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="modal-body">
                         <p> <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content" placeholder="분실물 주웠어요 or 찾아요"></textarea></p>
@@ -139,29 +142,25 @@
     {% if posts is not None %}
     <ul class="pagination">
         {% if links.previous %}
-        <li><a href="?page=1">First</a></li>
-        <li><a href="?page={{ posts.previous_page_number }}">&#60;</a></li>
+            <li><a href="{{ links.first }}">First</a></li>
+            <li><a href="{{ links.previous }}">&#60;</a></li>
         {% endif %}
 
-        {% for num in posts.paginator.page_range %}
-            {% if posts.number == num %}
-            <li>{{ num }}</li>
-            {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
-            <li><a href="?page={{ num }}">{{ num }}</a></li>
+        {% for page in links.pages %}
+            {% if page.index == index %}
+            <li>{{ index }}</li>
+            {% elif page.index > index|add:'-3' and page.index < index|add:'3' %}
+            <li><a href="{{page.url}}">{{page.index}}</a></li>
             {% endif %}
-        {% endfor %}
+        {% endfor %} 
 
         {% if links.next %}
         <li><a href="{{ links.next }}">&#62;</a></li>
-        <li><a href="?page={{ posts.paginator.num_pages }}">Last</a></li>
+        <li><a href="{{ links.last }}">Last</a></li>
         {% endif %}
     </ul>
     {% endif %}
     
-    
-
-    
-
     <script>
         function delpost(event, pk){
                 console.log(event)

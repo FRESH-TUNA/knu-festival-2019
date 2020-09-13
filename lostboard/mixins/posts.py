@@ -1,48 +1,37 @@
-from rest_framework.response import Response
+"""
+Basic building blocks for generic class based views.
+We don't bind behaviour to http method handlers yet,
+which allows mixin classes to be composed in interesting ways.
+"""
 from rest_framework import status
-from lostboard.models import Post
+from rest_framework.response import Response
+from rest_framework.settings import api_settings
 
-class ListModelMixin:
-    def list(self, request, *args, **kwargs):
+
+class CreateModelMixin:
+    """
+    Create a model instance.
+    """
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        
         queryset = self.filter_queryset(self.get_queryset())
-
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-class CreateModelMixin:   
-    def create(self, request, *args, **kwargs):
-        self.perform_create()
-        return Response(
-            {
-                "is_like": True,
-                "count": CommentLike.objects.all().filter(
-                    comment=Comment.objects.get(id=self.kwargs["comment_pk"])
-                ).count()
-            }, status=status.HTTP_201_CREATED
-        )
-    
-    def perform_create(self):
-        CommentLike.objects.create(
-            user=self.request.user, comment=Comment.objects.get(id=self.kwargs["comment_pk"]))
+    # def perform_create(self, serializer):
+    #     serializer.save()
 
-class DestroyModelMixin:
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(
-            {
-                "is_like": False,
-                "count": CommentLike.objects.all().filter(
-                    comment=Comment.objects.get(id=self.kwargs["comment_pk"]),
-                    like=True
-                ).count()
-            }, status=status.HTTP_200_OK
-        )
-
-    def perform_destroy(self, instance):
-        instance.delete()     
+    # def get_success_headers(self, data):
+    #     try:
+    #         return {'Location': str(data[api_settings.URL_FIELD_NAME])}
+    #     except (TypeError, KeyError):
+    #         return {}

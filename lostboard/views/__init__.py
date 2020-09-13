@@ -1,39 +1,33 @@
 import importlib
 import re
+import os
 import logging
 from functools import reduce
 from django.conf import settings
 from django.db.models.query import QuerySet
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ImproperlyConfigured
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from rest_framework.renderers import (
     TemplateHTMLRenderer,
     JSONRenderer
 )
 
-from rest_framework.mixins import (
-    ListModelMixin, 
-    RetrieveModelMixin, 
-    CreateModelMixin, 
-    UpdateModelMixin, 
-    DestroyModelMixin
-)
-
-class BaseGenericViewSet(
-    GenericViewSet, 
-    ListModelMixin, 
-    RetrieveModelMixin, 
-    CreateModelMixin, 
-    UpdateModelMixin, 
-    DestroyModelMixin
-):
+class BaseGenericViewSet(ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     # queryset
     # serializer_class = PurposeSerializer
     # lookup_field = 'comment_pk'
     
+    # Note: Views are made CSRF exempt from within `as_view` as to prevent
+    # accidental removal of this exemption in cases where `dispatch` needs to
+    # be overridden.
+    def dispatch(self, request, *args, **kwargs):
+        method = request.POST.get('_method', None)
+        request.method = method if method is not None else request.method
+        return super().dispatch(request, *args, **kwargs)
+
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -103,6 +97,9 @@ class BaseGenericViewSet(
         ).split("_")[:-2]
 
     def get_serializer_class(self):
+        index_action = ['list', 'create']
+        show_action = ['retrieve', 'update', 'delete']
+
         if self.serializer_class is not None:
             return super().get_serializer_class()
 
@@ -119,7 +116,7 @@ class BaseGenericViewSet(
             lambda resource, cur: cur + resource, resources, ""
         )
 
-        if self.action == 'list':
+        if self.action in index_action :
             serializer_name = "%sListSerializer" % serializer_resources_name
         else:
             serializer_name = "%sDetailSerializer" % serializer_resources_name
