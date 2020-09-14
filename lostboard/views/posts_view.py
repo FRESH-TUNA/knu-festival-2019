@@ -5,10 +5,8 @@ from lostboard.mixins.posts import CreateModelMixin
 from lostboard.models import Post
 import logging
 
-class PostsViewSet(CreateModelMixin, BaseGenericViewSet):
+class PostsView(CreateModelMixin, BaseGenericViewSet):
     pagination_class = PostsPaginator
-    model = Post
-
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -29,9 +27,10 @@ class PostsViewSet(CreateModelMixin, BaseGenericViewSet):
         return redirect('lostboard:posts-list')
 
     def get_queryset(self):
+        queryset = super().get_queryset()
         if self.action == 'list':
             found = self.request.GET.get('found', True)
             if found == 'False': found=False
-            return self.model.objects.filter(found=found)
+            return queryset.filter(found=found)
         else:
-            return self.model.objects.all()
+            return queryset.all()

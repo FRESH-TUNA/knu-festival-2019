@@ -1,6 +1,7 @@
 import importlib
 import re
 import os
+import inspect
 import logging
 from functools import reduce
 from django.conf import settings
@@ -16,17 +17,73 @@ from rest_framework.renderers import (
 
 class BaseGenericViewSet(ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
+
     # queryset
-    # serializer_class = PurposeSerializer
     # lookup_field = 'comment_pk'
     
     # Note: Views are made CSRF exempt from within `as_view` as to prevent
     # accidental removal of this exemption in cases where `dispatch` needs to
     # be overridden.
     def dispatch(self, request, *args, **kwargs):
+        setattr(self, 'model', self.get_model(self.get_resource()))
         method = request.POST.get('_method', None)
         request.method = method if method is not None else request.method
+
         return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        reference_object = None
+        reference_object_reference_name = None
+        
+        for parent_resource in self.get_parent_resources():
+            parent_queryset = self.get_model(parent_resource).objects.all()
+
+            if reference_object is not None:
+                parent_queryset = parent_queryset.filter({
+                    reference_object_reference_name: reference_object
+                })
+                        
+            reference_object_reference_name = ''.join(list(parent_resource)[:-1])
+            pk = self.kwargs["%s_pk" % reference_object_reference_name]
+            reference_object = get_object_or_404(queryset, pk=pk)
+
+        if reference_object is None:
+            return queryset
+        else:
+            return queryset.filter({
+                reference_object_reference_name: reference_object
+            })
+
+    def get_serializer_class(self):
+        index_action = ['list', 'create']
+        show_action = ['retrieve', 'update', 'delete']
+
+        if self.serializer_class is not None:
+            return super().get_serializer_class()
+
+        parent_resources = self.get_parent_resources()
+        resource = self.get_resource()
+
+        serializer_path = "%s.serializers%s" % (
+            self.request.resolver_match.app_name,
+            reduce(
+                lambda path, cur: "." + path + cur.lower(), parent_resources, ""
+            )
+        )
+
+        if self.action in index_action :
+            serializer_name = "%s_%s" % (resource, "list_serializer")  
+        else:
+            serializer_name = "%s_%s" % (resource, "detail_serializer")
+
+        serializer_path += ".%s" % serializer_name
+
+        serializer_name = self.camelize_snake(serializer_name)
+        return getattr(
+            __import__(serializer_path, globals(), locals(), [serializer_name], 0),
+            serializer_name
+        )
 
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -60,7 +117,7 @@ class BaseGenericViewSet(ModelViewSet):
     def get_parent_resources_template_prefix(self):
         return reduce(
             lambda model, cur: cur + "%s/" % model.lower(), 
-            self.get_resources()[:-1], ""
+            self.get_parent_resources(), ""
         )
 
     def get_template_names(self):
@@ -91,36 +148,26 @@ class BaseGenericViewSet(ModelViewSet):
             )
         return names
 
-    def get_resources(self):
-        return re.sub(
-            r'(?<!^)(?=[A-Z])', '_', self.__class__.__name__
-        ).split("_")[:-2]
 
-    def get_serializer_class(self):
-        index_action = ['list', 'create']
-        show_action = ['retrieve', 'update', 'delete']
+    def get_resource(self):
+        return inspect.getfile(self.__class__).split('/')[-1].split('_')[0]
 
-        if self.serializer_class is not None:
-            return super().get_serializer_class()
-
-        resources = self.get_resources()
-
-        serializer_path = "%s.serializers%s" % (
-            self.request.resolver_match.app_name,
-            reduce(
-                lambda path, cur: "." + path + cur.lower(), resources, ""
-            )
-        )
-
-        serializer_resources_name = reduce(
-            lambda resource, cur: cur + resource, resources, ""
-        )
-
-        if self.action in index_action :
-            serializer_name = "%sListSerializer" % serializer_resources_name
+    def get_parent_resources(self):
+        parent_resources = list(reversed(inspect.getfile(self.__class__).split('/')))[:-4]
+        if len(parent_resources) == 1:
+            return []
         else:
-            serializer_name = "%sDetailSerializer" % serializer_resources_name
+            return parent_resources[1:]            
+
+    def get_model(self, parent_resource):
+        model_path = "%s.models" % self.request.resolver_match.app_name
+        model_name = list(parent_resource)
+        model_name[0] = model_name[0].upper()
+        model_name = ''.join(model_name[:-1])
         return getattr(
-            __import__(serializer_path, globals(), locals(), [serializer_name], 0),
-            serializer_name
-        )
+            __import__(model_path, globals(), locals(), [model_name], 0),
+            model_name
+        )  
+
+    def camelize_snake(self, sentence):
+        return ''.join(x.title() for x in sentence.split('_'))

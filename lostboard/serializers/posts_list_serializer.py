@@ -9,6 +9,7 @@ class PostsListSerializer(serializers.ModelSerializer):
             return {'count': method(value)}
 
     comments = CommentsSerializerMethodField('get_comments_count')
+    url = serializers.HyperlinkedIdentityField(view_name='lostboard:posts-detail')
 
     class Meta:
         model = Post

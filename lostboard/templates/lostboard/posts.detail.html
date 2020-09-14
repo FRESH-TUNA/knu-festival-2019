@@ -52,7 +52,7 @@
         </div>
 
         <div id="delModal{{post.pk}}" class="modal">
-            <form action="{% url 'lostboard:posts-detail' id %}" method="POST">
+            <form action="{% url 'lostboard:posts_comments-list' id %}" method="POST">
                 {% csrf_token %}
                 {% include 'forms/delete.html' %}
                 <div class="modal-content delete-body">
@@ -66,8 +66,8 @@
                 </div>
             </form>
         </div>
-        {% comment %} <div id="cmtModal{{post.pk}}" class="modal">
-            <form action="{% url 'lostboard:createcomment' id %}" method="POST">
+        <div id="cmtModal{{post.pk}}" class="modal">
+            <form action="{% url 'lostboard:posts_comments-list' id %}" method="POST">
                 {% csrf_token %}
                 <div class="modal-content addcmt-body">
                     <div class="addcmt-header">
@@ -78,7 +78,7 @@
                     <button type="submit" class="btn btn-primary">확인</button>
                 </div>
             </form>
-        </div>  {% endcomment %}
+        </div> 
     </div>
 
     <script>

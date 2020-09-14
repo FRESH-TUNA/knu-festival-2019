@@ -1,7 +1,8 @@
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from .routers.posts import posts_router
+from .routers.posts_router import posts_router
+from .routers.posts_comments_router import posts_comments_router
 
 # 분실물 urls.py
 app_name = 'lostboard'
@@ -16,4 +17,5 @@ app_name = 'lostboard'
 
 urlpatterns = [
     path('', include(posts_router.urls)),
+    path('', include(posts_comments_router.urls))
 ]
