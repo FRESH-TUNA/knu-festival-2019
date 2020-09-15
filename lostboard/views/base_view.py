@@ -2,7 +2,6 @@ import importlib
 import re
 import os
 import inspect
-import logging
 from functools import reduce
 from django.conf import settings
 from django.db.models.query import QuerySet
@@ -15,7 +14,7 @@ from rest_framework.renderers import (
     JSONRenderer
 )
 
-class BaseGenericViewSet(ModelViewSet):
+class BaseView(ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     # lookup_field = 'comment_pk'
     

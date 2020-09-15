@@ -1,10 +1,10 @@
 from django.shortcuts import redirect, reverse
-from lostboard.views import BaseGenericViewSet
+from lostboard.views.base_view import BaseView
 from lostboard.paginators.posts import PostsPaginator
-import logging
 
-class PostsView(BaseGenericViewSet):
+class PostsView(BaseView):
     pagination_class = PostsPaginator
+
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
