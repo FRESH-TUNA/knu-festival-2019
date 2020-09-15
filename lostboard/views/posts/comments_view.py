@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, reverse, get_object_or_404
 from lostboard.views import BaseGenericViewSet
-from lostboard.mixins.posts import CreateModelMixin
 from lostboard.models import Post
+import logging
 
 class CommentsView(BaseGenericViewSet):
     def list(self, request, *args, **kwargs):
@@ -10,10 +10,9 @@ class CommentsView(BaseGenericViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(lostpost=get_object_or_404(Post, pk=self.kwargs['post_pk']))
+        serializer.save(post=get_object_or_404(Post, pk=self.kwargs['post_pk']))
         headers = self.get_success_headers(serializer.data)
-        return redirect(reverse('lostboard:posts-detail', pk=self.kwargs['post_pk']))
-
+        return redirect(reverse('lostboard:posts-detail', kwargs={'pk': self.kwargs['post_pk']}))
 
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)

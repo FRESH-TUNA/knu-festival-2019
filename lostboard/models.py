@@ -21,6 +21,11 @@ class Post(models.Model):
         super(Post, self).delete(*args, **kargs)
 
 class Comment(models.Model):
-    lostpost = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments', blank=True)
+    post = models.ForeignKey(
+        'Post', 
+        on_delete=models.CASCADE, 
+        related_name='comments', 
+        blank=True,
+    )
     content = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)

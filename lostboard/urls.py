@@ -16,6 +16,6 @@ app_name = 'lostboard'
 # ]
 
 urlpatterns = [
+    path('', include(posts_comments_router.urls)),
     path('', include(posts_router.urls)),
-    path('', include(posts_comments_router.urls))
 ]
