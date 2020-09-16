@@ -17,7 +17,6 @@ from rest_framework.renderers import (
 class BaseView(ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
     # lookup_field = 'comment_pk'
-    
     ## dispatch ##
     def dispatch(self, request, *args, **kwargs):
         # delete, update, patch... support
@@ -34,11 +33,12 @@ class BaseView(ModelViewSet):
         """
         super().initial(request, *args, **kwargs)
 
-        # autoloading module
+        # autoloading resource related module
         self.autoload_model()
         self.autoload_queryset()
         self.autoload_serializer()
         self.autoload_template()
+
 
     ## autoloading ##
     def autoload_model(self):
@@ -107,7 +107,28 @@ class BaseView(ModelViewSet):
                         'cls': self.__class__.__name__,
                     }
                 )
-
+    
+    # def autoload_service(self):
+    #     import logging
+    #     service_path = "%s.services" % self.request.resolver_match.app_name
+    #     service_dir_path = os.path.dirname(
+    #         __import__(service_path, globals(), locals(), ['*']).__file__
+    #     )
+    #     service_files = [
+    #         _file 
+    #             for _file in os.listdir(service_dir_path) 
+    #                 if os.path.isfile(os.path.join(service_dir_path, _file))
+    #     ][1:]
+    #     for _file in service_files:
+    #         file_name = _file[:-3]
+    #         service_class_name = self.camelize_snake(file_name)
+    #         globals()[service_class_name] = getattr(
+    #             __import__(
+    #                 "%s.%s" % (service_path, file_name), 
+    #                 globals(), locals(), [service_class_name]
+    #             ), service_class_name
+    #         )
+    
     # get_queryset #
     def autoload_queryset(self):
         if getattr(self, 'queryset', None) is None:
