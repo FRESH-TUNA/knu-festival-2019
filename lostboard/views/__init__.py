@@ -37,8 +37,8 @@ class BaseView(ModelViewSet):
         self.autoload_model()
         self.autoload_queryset()
         self.autoload_serializer()
+        self.autoload_paginator()
         self.autoload_template()
-
 
     ## autoloading ##
     def autoload_model(self):
@@ -107,7 +107,29 @@ class BaseView(ModelViewSet):
                         'cls': self.__class__.__name__,
                     }
                 )
-    
+    def autoload_paginator(self):
+        if getattr(self, 'pagination_class', None) is None:
+            parent_resources = self.get_parent_resources()
+            resource = self.get_resource()
+
+            paginator_path = "%s.paginators%s" % (
+                self.request.resolver_match.app_name,
+                reduce(
+                    lambda path, cur: "." + path + cur.lower(), parent_resources, ""
+                )
+            )
+
+            paginator_name = "%s_paginator" % resource
+            paginator_path += ".%s" % paginator_name
+            paginator_name = self.camelize_snake(paginator_name)
+
+            try:
+                setattr(self, 'pagination_class', getattr(
+                    __import__(paginator_path, globals(), locals(), [paginator_name], 0),
+                    paginator_name
+                ))
+            except:
+                pass
     # def autoload_service(self):
     #     import logging
     #     service_path = "%s.services" % self.request.resolver_match.app_name

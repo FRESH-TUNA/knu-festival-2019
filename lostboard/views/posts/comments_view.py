@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, reverse, get_object_or_404
-from lostboard.views.base_view import BaseView
+from lostboard.views import BaseView
 from lostboard.models import Post
 
 class CommentsView(BaseView):

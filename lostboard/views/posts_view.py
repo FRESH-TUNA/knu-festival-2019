@@ -1,12 +1,11 @@
 from django.shortcuts import redirect, reverse
+from django.contrib import messages
 from rest_framework.response import Response
 from rest_framework import status
-from lostboard.views.base_view import BaseView
-from lostboard.paginators.posts import PostsPaginator
+from lostboard.views import BaseView
 from lostboard.services.password_validation_service import PasswordValidationService
-class PostsView(BaseView):
-    pagination_class = PostsPaginator
 
+class PostsView(BaseView):
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
@@ -33,14 +32,20 @@ class PostsView(BaseView):
 
     def destroy(self, request, *args, **kwargs):
         found = self.get_object().found
-
-        if PasswordValidationService(
+        
+        delete_success = PasswordValidationService(
             request_password=request.POST.get('password', ""),
             instance_password=self.get_object().password
-        ).call():
+        ).call()
+
+        if delete_success:
             json_response = super().destroy(request, *args, **kwargs)
+            if request.accepted_renderer.format == 'html':
+                messages.info(request, '게시물 삭제에 성공했습니다.')
         else:
             json_response = Response({'password': "is not correct"}, status=status.HTTP_400_BAD_REQUEST)
+            if request.accepted_renderer.format == 'html':
+                messages.error(request, '패스워드가 다릅니다.')
 
         if request.accepted_renderer.format == 'html':
             return redirect("%s?found=%s" % (
