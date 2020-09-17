@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from lostboard.views import BaseView
 from lostboard.services.password_validation_service import PasswordValidationService
+import logging
 
 class PostsView(BaseView):
     def list(self, request, *args, **kwargs):
@@ -38,19 +39,24 @@ class PostsView(BaseView):
             instance_password=self.get_object().password
         ).call()
 
+        # logging.error(delete_success)
+    
         if delete_success:
-            json_response = super().destroy(request, *args, **kwargs)
-            if request.accepted_renderer.format == 'html':
-                messages.info(request, '게시물 삭제에 성공했습니다.')
+            response = super().destroy(request, *args, **kwargs)
         else:
-            json_response = Response({'password': "is not correct"}, status=status.HTTP_400_BAD_REQUEST)
-            if request.accepted_renderer.format == 'html':
-                messages.error(request, '패스워드가 다릅니다.')
+            response = Response({'password': "is not correct"}, status=status.HTTP_400_BAD_REQUEST)
+
 
         if request.accepted_renderer.format == 'html':
-            return redirect("%s?found=%s" % (
-                reverse('lostboard:posts-list'), found
-            ))
+            if delete_success:
+                messages.info(request, '게시물 삭제에 성공했습니다.')
+                return redirect("%s?found=%s" % (
+                    reverse('lostboard:posts-list'), found
+                ))
+            else:
+                messages.error(request, '패스워드가 다릅니다.')
+                return redirect(request.META['HTTP_REFERER'])
+           
         return json_response
 
     def get_queryset(self):

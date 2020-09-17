@@ -12,6 +12,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <div class="boardBody fontClass2">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'info' %}
+                <div class="alert alert-success alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ message }} 
+                </div>
+            {% else %}
+                <div class="alert alert-danger alert-dismissible">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    {{ message }} 
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     <div class="board-header">
         <p class="title">분실물</p>
         <a href="javascript:history.back()">뒤로가기</a>
@@ -52,7 +67,7 @@
         </div>
 
         <div id="delModal{{post.pk}}" class="modal">
-            <form action="{% url 'lostboard:posts_comments-list' id %}" method="POST">
+            <form action="{{url}}" method="POST">
                 {% csrf_token %}
                 {% include 'forms/delete.html' %}
                 <div class="modal-content delete-body">
@@ -61,7 +76,7 @@
                         <span class="close" id="delcls{{post.pk}}">&times;</span>     
                     </div>                                                          
                     <p>글 등록시 입력 한 비밀번호 입력하세요</p>
-                    <input name="valpw" type="password">
+                    <input name="password" type="password">
                     <button type="submit" class="btn btn-danger">삭제</button>
                 </div>
             </form>
