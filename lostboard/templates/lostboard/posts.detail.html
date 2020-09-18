@@ -57,14 +57,7 @@
             </div>
         </div>
         <hr>
-        <div class="board-detail-comments">
-        {% for comment in comments %}
-            <div class="comment">
-                <p class="detail-comment">{{ comment.content|linebreaks }}</p>
-                <div class="detail-comment-date">{{ comment.created_at }}</div>
-            </div>
-        {% endfor %}
-        </div>
+        <div class="board-detail-comments"></div>
 
         <div id="delModal{{post.pk}}" class="modal">
             <form action="{{url}}" method="POST">
@@ -95,50 +88,15 @@
             </form>
         </div> 
     </div>
-
-    <script>
-        function delpost(event, pk){
-                console.log(event)
-                clickmodal = "delModal" + pk;
-                clickbtn = "delBtn" + pk;
-                clickcls = "delcls"+ pk;
-                var btn = document.getElementById(clickbtn);
-                var modal = document.getElementById(clickmodal);
-                var span = document.getElementById(clickcls);   
-                modal.style.display = "block";
-
-
-                span.onclick = function() {
-                    modal.style.display = "none";
-                }
-                    window.onclick = function(event) {
-                        if (event.target == modal) {
-                            modal.style.display = "none";
-                        }
-                    }
-                event.stopPropagation()
-        }
-        function addcomment(event, pk){
-                console.log(event)
-                clickmodal = "cmtModal" + pk;
-                clickbtn = "cmtBtn" + pk;
-                clickcls = "cmtcls"+ pk;
-                var btn = document.getElementById(clickbtn);
-                var modal = document.getElementById(clickmodal);
-                var span = document.getElementById(clickcls);   
-                modal.style.display = "block";
-
-
-                span.onclick = function() {
-                    modal.style.display = "none";
-                }
-                    window.onclick = function(event) {
-                        if (event.target == modal) {
-                            modal.style.display = "none";
-                        }
-                    }
-                event.stopPropagation()
-        }
-    </script>
 </div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{% static 'lostboard/js/posts/comments.list.js' %}"></script>
+<script>
+window.onload = async function() {
+    posts_comments_list("{% url 'lostboard:posts_comments-list' id %}.json")
+}
+</script>
 {% endblock %}
