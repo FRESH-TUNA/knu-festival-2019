@@ -1,12 +1,32 @@
 from rest_framework import serializers
 from lostboard.models import Post, Comment
+from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 
 class PostsDetailSerializer(serializers.ModelSerializer):
-    from .posts.comments_list_serializer import CommentsListSerializer
+    # comments = serializers.HyperlinkedIdentityField(
+    #     view_name='lostboard:posts_comments-list',
+    #     lookup_url_kwarg='post_pk',
+    #     lookup_field='pk'
+    # )
 
-    comments = CommentsListSerializer(required=False, many=True)
+    comments = serializers.SerializerMethodField()
+
     url = serializers.HyperlinkedIdentityField(view_name='lostboard:posts-detail')
 
     class Meta:
         model = Post
         fields = '__all__'
+
+    def get_comments(self, obj):
+        class CommentsSerializer(serializers.Serializer):
+            url = serializers.HyperlinkedIdentityField(
+                view_name='lostboard:posts_comments-list',
+                lookup_url_kwarg='post_pk',
+                lookup_field='pk'
+            )
+            count = serializers.SerializerMethodField()
+            
+            def get_count(self, obj):
+                return obj.comments.count() 
+        return CommentsSerializer(obj, context=self.context).data
+

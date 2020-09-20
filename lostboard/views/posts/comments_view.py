@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, reverse, get_object_or_404
 from lostboard.views import BaseView
 from lostboard.models import Post
+import logging
 
 class CommentsView(BaseView):
     def list(self, request, *args, **kwargs):

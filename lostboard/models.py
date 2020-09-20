@@ -30,6 +30,7 @@ class Comment(models.Model):
     parent = models.ForeignKey('Comment', on_delete=models.CASCADE, related_name='parent_comments', null=True)
     content = models.TextField(null=False)
     # depth를 제한할 필요성이 있을때 사용한다.
+    active = models.BooleanField(default=True)
     depth = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     password = models.CharField(max_length=50)

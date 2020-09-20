@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework_nested.relations import NestedHyperlinkedIdentityField
 from lostboard.models import Comment
 
-class CommentsListSerializer(serializers.ModelSerializer):
+class CommentsDetailSerializer(serializers.ModelSerializer):
     # post_pk: url에서 받는 인자, 'post__pk': parent model의 기본키 접근을 위한 ORM 문법
     # comments = NestedHyperlinkedIdentityField(
     #     view_name='lostboard:comments_comments-detail',

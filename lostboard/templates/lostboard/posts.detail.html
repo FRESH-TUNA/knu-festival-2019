@@ -4,7 +4,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static 'base/css/board.css' %}">
-    <link rel="stylesheet" href="{% static 'css/lostboard.css' %}">
+    <link rel="stylesheet" href="{% static 'lostboard/css/posts.detail.css' %}">
 {% endblock %}
 
 {% block contents %}
@@ -40,8 +40,8 @@
                 <p>잃어버렸어요</p>
                 {% endif %}
                 <div class="buttons">
-                    <button id="cmtBtn{{post.pk}}" onclick="addcomment(event, '{{post.pk}}')" class="btn-addcmt"></button>
-                    <button id="delBtn{{post.pk}}" onclick="delpost(event, '{{post.pk}}')"></button>
+                    <button id="cmtBtn" onclick="show_add_comment_modal(event, '{{post.pk}}')" class="btn-addcmt"></button>
+                    <button id="delBtn" onclick="show_delete_post_modal(event)"></button>
                 </div>
             </div>
             <div class="detail-content">
@@ -53,13 +53,14 @@
             {% endif %}
             <div class="detail-footer">
                 <p class="footerArea">{{post.created_at}}</p>
-                <p class="footerArea">댓글 {{ comments|length }}개</p>
+                <p class="footerArea">댓글 {{ comments.count }}개</p>
             </div>
         </div>
         <hr>
-        <div class="board-detail-comments"></div>
 
-        <div id="delModal{{post.pk}}" class="modal">
+        <div class="board-detail-comments lostboard"></div>
+
+        <div class="modal posts-delete">
             <form action="{{url}}" method="POST">
                 {% csrf_token %}
                 {% include 'forms/delete.html' %}
@@ -74,8 +75,8 @@
                 </div>
             </form>
         </div>
-        <div id="cmtModal{{post.pk}}" class="modal">
-            <form action="{% url 'lostboard:posts_comments-list' id %}" method="POST">
+        <div class="modal posts-comments-create">
+            <form action="{{ comments }}" method="POST">
                 {% csrf_token %}
                 <div class="modal-content addcmt-body">
                     <div class="addcmt-header">
@@ -83,20 +84,53 @@
                         <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
                     </div>                                                          
                     <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
+                    <input type="password" name="password" maxlength="200" required="" id="id_password" placeholder="패스워드를 입력하세요">
                     <button type="submit" class="btn btn-primary">확인</button>
                 </div>
             </form>
         </div> 
+        <div class="modal comments-comments-create">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-content addcmt-body">
+                    <div class="addcmt-header">
+                        <p>댓글 작성</p>
+                        <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
+                    </div>                                                          
+                    <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
+                    <input type="password" name="password" maxlength="200" required="" id="id_password" placeholder="패스워드를 입력하세요">
+                    <button type="submit" class="btn btn-primary">확인</button>
+                </div>
+            </form>
+        </div> 
+        <div class="modal comments-delete">
+            <form action="" method="POST">
+                {% csrf_token %}
+                {% include 'forms/delete.html' %}
+                <div class="modal-content delete-body">
+                    <div class="delete-header">
+                        <p>삭제하기</p>
+                        <span class="close" id="delcls{{post.pk}}">&times;</span>     
+                    </div>                                                          
+                    <p>글 등록시 입력 한 비밀번호 입력하세요</p>
+                    <input name="password" type="password">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 
 {% block js %}
+<script src="{% static 'lostboard/js/posts.detail.js' %}"></script>
 <script src="{% static 'lostboard/js/posts/comments.list.js' %}"></script>
+<script src="{% static 'lostboard/js/comments/comments.list.js' %}"></script> 
+<script src="{% static 'lostboard/js/comments.detail.js' %}"></script>
 <script>
 window.onload = async function() {
-    posts_comments_list("{% url 'lostboard:posts_comments-list' id %}.json")
+    posts_comments_list("{{ comments.url }}.json")
 }
 </script>
 {% endblock %}
