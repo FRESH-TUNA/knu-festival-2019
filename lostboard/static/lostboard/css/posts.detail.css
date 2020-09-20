@@ -1,0 +1,41 @@
+.board-detail-comments.lostboard {
+    background-color: #ffdde6;
+    grid-gap: 0;
+}
+
+.board-detail-comments.lostboard > .comment {
+    display: flex;
+    background-color: #ffdde6;
+    padding: 0%;
+    border-radius: 0px;
+    margin-top: 0px;
+    width: 100%;
+}
+
+.board-detail-comments.lostboard > .comment > .body {
+    background-color: #FFF5FF;
+    padding: 2%;
+    border-radius: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.board-detail-comments.lostboard > .comment > .body > .buttons {
+    flex-direction: row-reverse;
+}
+
+.board-detail-comments.lostboard > .comment > .hierachy {
+    display: flex;
+}
+
+.board-detail-comments.lostboard > .comment > .hierachy .line {
+    height: 100%;
+    width: 15px;
+}
+
+.board-detail-comments.lostboard > .comment > .hierachy .line > i  {
+    width: 2px;
+    background-color: #FFF5FF;
+    height: 100%;
+    display: block;
+}

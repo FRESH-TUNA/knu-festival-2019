@@ -5,5 +5,6 @@ temp/
 env/
 !webserver/env
 static/
+!*/static
 media/
 *.env
