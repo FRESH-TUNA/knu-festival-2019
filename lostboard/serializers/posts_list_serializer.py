@@ -14,6 +14,9 @@ class PostsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
     def get_comments_count(self, obj):
         return obj.comments.count()

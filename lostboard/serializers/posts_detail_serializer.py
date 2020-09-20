@@ -16,6 +16,9 @@ class PostsDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
     def get_comments(self, obj):
         class CommentsSerializer(serializers.Serializer):
