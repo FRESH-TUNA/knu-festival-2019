@@ -33,3 +33,8 @@ class PostsDetailSerializer(serializers.ModelSerializer):
                 return obj.comments.count() 
         return CommentsSerializer(obj, context=self.context).data
 
+    def update(self, instance, validated_data):
+        # image가 없으면 update 하지 않음
+        if validated_data.get('image') == None:
+            validated_data.pop('image')
+        return super().update(instance, validated_data)

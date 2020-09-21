@@ -1,0 +1,15 @@
+<div class="modal posts-delete">
+    <form action="{{url}}" method="POST">
+        {% csrf_token %}
+        {% include 'forms/delete.html' %}
+        <div class="modal-content delete-body">
+            <div class="delete-header">
+                <p>삭제하기</p>
+                <span class="close" id="delcls{{post.pk}}">&times;</span>
+            </div>
+            <p>글 등록시 입력 한 비밀번호 입력하세요</p>
+            <input name="password" type="password">
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </div>
+    </form>
+</div>

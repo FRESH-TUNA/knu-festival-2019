@@ -1,0 +1,39 @@
+<div class="modal posts-update fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog create-modal" role="document">
+        <div class="modal-content create-modal-body">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">수정하기</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{url}}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% include 'forms/patch.html' %}
+                <div class="modal-body">
+                    <p> <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"
+                            placeholder="분실물 주웠어요 or 찾아요">{{content}}</textarea></p>
+                    <p><label for="id_image">사진 (기존사진 수정시만 추가!)</label> <input type="file" name="image" id="id_image"></p>
+                    {% if found %}
+                        <p><label for="found">주웠어요</label> <input id="found" type='radio' name='found' value=True checked>
+                    </p>
+                    <p><label for="finding">잃어버렸어요</label> <input id="finding" type='radio' name='found' value=False>
+                    </p>
+                    {% else %}
+                    <p><label for="found">주웠어요</label> <input id="found" type='radio' name='found' value=True >
+                    </p>
+                    <p><label for="finding">잃어버렸어요</label> <input id="finding" type='radio' name='found' value=False checked>
+                    </p>
+                    {% endif %}
+                    <p><input type="password" name="password" maxlength="200" required="" id="id_password"
+                            placeholder="패스워드"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-primary">수정</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

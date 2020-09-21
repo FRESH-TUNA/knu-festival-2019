@@ -1,10 +1,11 @@
 {% extends 'base/base.html' %}
 
 {% load static %}
+{% load rest_framework %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'base/css/board.css' %}">
-    <link rel="stylesheet" href="{% static 'lostboard/css/posts.detail.css' %}">
+<link rel="stylesheet" href="{% static 'base/css/board.css' %}">
+<link rel="stylesheet" href="{% static 'lostboard/css/posts.detail.css' %}">
 {% endblock %}
 
 {% block contents %}
@@ -12,21 +13,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <div class="boardBody fontClass2">
-    {% if messages %}
-        {% for message in messages %}
-            {% if message.tags == 'info' %}
-                <div class="alert alert-success alert-dismissible">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ message }} 
-                </div>
-            {% else %}
-                <div class="alert alert-danger alert-dismissible">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    {{ message }} 
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+    {% include 'messages.html' %}
+
     <div class="board-header">
         <p class="title">분실물</p>
         <a href="javascript:history.back()">뒤로가기</a>
@@ -41,6 +29,7 @@
                 {% endif %}
                 <div class="buttons">
                     <button id="cmtBtn" onclick="show_add_comment_modal(event)" class="btn-addcmt"></button>
+                    <button id="editBtn" data-toggle="modal" data-target="#updateModal" class="big btn-editcmt"></button>
                     <button id="delBtn" onclick="show_delete_post_modal(event)"></button>
                 </div>
             </div>
@@ -49,10 +38,10 @@
                 <br>
             </div>
             {% if image %}
-                <img src="{{ image }}" alt="">
+            <img src="{{ image }}" alt="">
             {% endif %}
             <div class="detail-footer">
-                <p class="footerArea">{{post.created_at}}</p>
+                <p class="footerArea">{{created_at}}</p>
                 <p class="footerArea">댓글 {{ comments.count }}개</p>
             </div>
         </div>
@@ -60,64 +49,15 @@
 
         <div class="board-detail-comments lostboard"></div>
 
-        <div class="modal posts-delete">
-            <form action="{{url}}" method="POST">
-                {% csrf_token %}
-                {% include 'forms/delete.html' %}
-                <div class="modal-content delete-body">
-                    <div class="delete-header">
-                        <p>삭제하기</p>
-                        <span class="close" id="delcls{{post.pk}}">&times;</span>     
-                    </div>                                                          
-                    <p>글 등록시 입력 한 비밀번호 입력하세요</p>
-                    <input name="password" type="password">
-                    <button type="submit" class="btn btn-danger">삭제</button>
-                </div>
-            </form>
-        </div>
-        <div class="modal posts-comments-create">
-            <form action="{{ comments.url }}" method="POST">
-                {% csrf_token %}
-                <div class="modal-content addcmt-body">
-                    <div class="addcmt-header">
-                        <p>댓글 작성</p>
-                        <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
-                    </div>                                                          
-                    <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
-                    <input type="password" name="password" maxlength="200" required="" id="id_password" placeholder="패스워드를 입력하세요">
-                    <button type="submit" class="btn btn-primary">확인</button>
-                </div>
-            </form>
-        </div> 
-        <div class="modal comments-comments-create">
-            <form action="" method="POST">
-                {% csrf_token %}
-                <div class="modal-content addcmt-body">
-                    <div class="addcmt-header">
-                        <p>댓글 작성</p>
-                        <span class="close" id="cmtcls{{post.pk}}">&times;</span>     
-                    </div>                                                          
-                    <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
-                    <input type="password" name="password" maxlength="200" required="" id="id_password" placeholder="패스워드를 입력하세요">
-                    <button type="submit" class="btn btn-primary">확인</button>
-                </div>
-            </form>
-        </div> 
-        <div class="modal comments-delete">
-            <form action="" method="POST">
-                {% csrf_token %}
-                {% include 'forms/delete.html' %}
-                <div class="modal-content delete-body">
-                    <div class="delete-header">
-                        <p>삭제하기</p>
-                        <span class="close" id="delcls{{post.pk}}">&times;</span>     
-                    </div>                                                          
-                    <p>글 등록시 입력 한 비밀번호 입력하세요</p>
-                    <input name="password" type="password">
-                    <button type="submit" class="btn btn-danger">삭제</button>
-                </div>
-            </form>
-        </div>
+        {% include 'lostboard/posts.delete.form.html' %}
+
+        {% include 'lostboard/posts.update.form.html' with url=url content=content found=found%}
+
+        {% include 'lostboard/posts/comments.create.form.html' %}
+
+        {% include 'lostboard/comments/comments.create.form.html' %}
+
+        {% include 'lostboard/comments.delete.form.html' %}
     </div>
 </div>
 {% endblock %}
@@ -126,11 +66,11 @@
 {% block js %}
 <script src="{% static 'lostboard/js/posts.detail.js' %}"></script>
 <script src="{% static 'lostboard/js/posts/comments.list.js' %}"></script>
-<script src="{% static 'lostboard/js/comments/comments.list.js' %}"></script> 
+<script src="{% static 'lostboard/js/comments/comments.list.js' %}"></script>
 <script src="{% static 'lostboard/js/comments.detail.js' %}"></script>
 <script>
-window.onload = async function() {
-    posts_comments_list("{{ comments.url }}.json")
-}
+    window.onload = async function () {
+        posts_comments_list("{{ comments.url }}.json")
+    }
 </script>
 {% endblock %}

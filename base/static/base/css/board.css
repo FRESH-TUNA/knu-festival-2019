@@ -96,6 +96,10 @@
     background-image: url("https://image.flaticon.com/icons/svg/1380/1380338.svg");
 }
 
+.boardBody .buttons > button.btn-editcmt {
+    background-image: url("https://www.flaticon.com/svg/static/icons/svg/1159/1159633.svg");
+}
+
 .boardBody .alert { margin-top: 20px; }
 
 .boardBody .alert-dismissible .close { padding: 0.5rem; }

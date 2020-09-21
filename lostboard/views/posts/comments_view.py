@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, reverse, get_object_or_404
 from lostboard.views import BaseView
+from django.contrib import messages
 from lostboard.models import Post
 
 class CommentsView(BaseView):
@@ -16,9 +17,8 @@ class CommentsView(BaseView):
         headers = self.get_success_headers(serializer.data)
 
         if request.accepted_renderer.format == 'html':
-            return redirect(
-                reverse('lostboard:posts-detail', kwargs={'pk': self.kwargs['post_pk']})
-            )
+            messages.info(request, '댓글 생성에 성공했습니다.')
+            return redirect(request.META['HTTP_REFERER'])
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         
     def retrieve(self, request, *args, **kwargs):

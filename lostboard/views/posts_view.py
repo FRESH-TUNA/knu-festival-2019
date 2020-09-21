@@ -28,7 +28,24 @@ class PostsView(BaseView):
         pass
 
     def partial_update(self, request, *args, **kwargs):
-        pass
+        password_correct = PasswordValidationService(
+            request_password=request.POST.get('password', ""),
+            instance_password=self.get_object().password
+        ).call()
+
+        if password_correct:
+            kwargs['partial'] = True
+            json_response = super().update(request, *args, **kwargs)
+        else:
+            json_response = Response({'password': "is not correct"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.accepted_renderer.format == 'html':
+            if password_correct:
+                messages.info(request, '게시물 수정에 성공했습니다.')                
+            else:
+                messages.error(request, '패스워드가 다릅니다.')
+            return redirect(request.META['HTTP_REFERER'])
+        return json_response
 
     def destroy(self, request, *args, **kwargs):
         post = self.get_object()

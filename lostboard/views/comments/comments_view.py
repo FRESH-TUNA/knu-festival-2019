@@ -1,12 +1,12 @@
 from django.shortcuts import redirect, reverse, get_object_or_404
+from django.contrib import messages
 from lostboard.views import BaseView
-from lostboard.models import Comment
 from lostboard.services.posts_comments_deactive_service import PostsCommentsDeactiveService
 from lostboard.services.password_validation_service import PasswordValidationService
 
 class CommentsView(BaseView):
     def get_queryset(self):
-        parent_comment = get_object_or_404(Comment, pk=self.kwargs['comment_pk'])
+        parent_comment = get_object_or_404(self.model, pk=self.kwargs['comment_pk'])
         return self.model.objects.filter(parent=parent_comment)
     
     def list(self, request, *args, **kwargs):
@@ -15,7 +15,7 @@ class CommentsView(BaseView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        parent_comment = get_object_or_404(Comment, pk=self.kwargs['comment_pk'])
+        parent_comment = get_object_or_404(self.model, pk=self.kwargs['comment_pk'])
         comment = serializer.save(
             active=True,
             post=parent_comment.post, 
@@ -25,6 +25,7 @@ class CommentsView(BaseView):
         headers = self.get_success_headers(serializer.data)
 
         if request.accepted_renderer.format == 'html':
+            messages.info(request, '댓글 생성에 성공했습니다.')
             return redirect(reverse('lostboard:posts-detail', kwargs={'pk': comment.post.pk}))
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 

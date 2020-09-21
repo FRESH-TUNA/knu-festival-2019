@@ -139,26 +139,6 @@ class BaseView(ModelViewSet):
                 ))
             except:
                 pass
-    # def autoload_service(self):
-    #     import logging
-    #     service_path = "%s.services" % self.request.resolver_match.app_name
-    #     service_dir_path = os.path.dirname(
-    #         __import__(service_path, globals(), locals(), ['*']).__file__
-    #     )
-    #     service_files = [
-    #         _file 
-    #             for _file in os.listdir(service_dir_path) 
-    #                 if os.path.isfile(os.path.join(service_dir_path, _file))
-    #     ][1:]
-    #     for _file in service_files:
-    #         file_name = _file[:-3]
-    #         service_class_name = self.camelize_snake(file_name)
-    #         globals()[service_class_name] = getattr(
-    #             __import__(
-    #                 "%s.%s" % (service_path, file_name), 
-    #                 globals(), locals(), [service_class_name]
-    #             ), service_class_name
-    #         )
     
     # get_queryset #
     def autoload_queryset(self):
@@ -210,3 +190,24 @@ class BaseView(ModelViewSet):
 
     def camelize_snake(self, sentence):
         return ''.join(x.title() for x in sentence.split('_'))
+
+    # def autoload_service(self):
+    #     import logging
+    #     service_path = "%s.services" % self.request.resolver_match.app_name
+    #     service_dir_path = os.path.dirname(
+    #         __import__(service_path, globals(), locals(), ['*']).__file__
+    #     )
+    #     service_files = [
+    #         _file 
+    #             for _file in os.listdir(service_dir_path) 
+    #                 if os.path.isfile(os.path.join(service_dir_path, _file))
+    #     ][1:]
+    #     for _file in service_files:
+    #         file_name = _file[:-3]
+    #         service_class_name = self.camelize_snake(file_name)
+    #         globals()[service_class_name] = getattr(
+    #             __import__(
+    #                 "%s.%s" % (service_path, file_name), 
+    #                 globals(), locals(), [service_class_name]
+    #             ), service_class_name
+    #         )
