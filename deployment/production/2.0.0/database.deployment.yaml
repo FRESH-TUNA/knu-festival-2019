@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: knufestival2019-db
-  namespace: production
+  name: production-db
+  namespace: knufesta2019
 spec:
   selector:
     matchLabels:
-      app: knufestival2019-db
+      app: production-db
   template:
     metadata:
-      name: knufestival2019-db
+      name: knufesta2019-db
       labels:
-        app: knufestival2019-db
+        app: knufesta2019-db
     spec:
       containers:
-      - name: knufestival2019-db
+      - name: knufesta2019-db
         image: postgres:12.2-alpine
         envFrom:
         - secretRef:
-            name: knufestival2019-db-env
+            name: knufesta2019-db-production-env
