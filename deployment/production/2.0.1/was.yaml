@@ -45,7 +45,8 @@ spec:
       containers:
       - name: production-migrator
         image: lunacircle4/was.knufesta2019:2.0.1
-        command: ["python3 manage.py migrate --settings=config.environments.production"]
+        command: ["/bin/sh"]
+        args: ["-c", "python3 manage.py migrate --settings=config.environments.production;"]
         envFrom:
         - secretRef:
             name: was-production-env
