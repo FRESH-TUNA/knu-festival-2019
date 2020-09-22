@@ -37,8 +37,8 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: knu-festival-migrator
-  namespace: production
+  name: production-migrator
+  namespace: knufesta2019
 spec:
   template:
     spec:
@@ -48,6 +48,6 @@ spec:
         command: ["python3 manage.py migrate --settings=config.environments.production"]
         envFrom:
         - secretRef:
-            name: knufestival2019-was-env
+            name: knufesta2019-was-production-env
       restartPolicy: Never
   backoffLimit: 4
