@@ -18,7 +18,7 @@ spec:
         image: lunacircle4/was.knufesta2019:2.0.1
         envFrom:
         - secretRef:
-            name: knufesta2019-was-production-env
+            name: was-production-env
 ---
 apiVersion: v1
 kind: Service
@@ -48,6 +48,6 @@ spec:
         command: ["python3 manage.py migrate --settings=config.environments.production"]
         envFrom:
         - secretRef:
-            name: knufesta2019-was-production-env
+            name: was-production-env
       restartPolicy: Never
   backoffLimit: 4
