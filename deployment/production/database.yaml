@@ -15,9 +15,19 @@ spec:
       containers:
       - name: db
         image: postgres:12.2-alpine
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: db-volume
         envFrom:
         - secretRef:
             name: production-db
+      volumes:
+      - name: db-volume
+        hostPath:
+          # directory location on host
+          path: /volumes/knufesta2019-db-volume
+          # this field is optional
+          type: Directory
 ---
 apiVersion: v1
 kind: Service
