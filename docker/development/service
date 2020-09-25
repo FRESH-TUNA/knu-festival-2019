@@ -10,4 +10,5 @@ until pg_isready -h database >/dev/null 2>&1; do
 done
 
 printf '\npostgres loaded! \ndevelopment server start!\n'
-python3 /logic/manage.py runserver 0.0.0.0:$EXPOSE_PORT
+# python3 /logic/manage.py runserver 0.0.0.0:$EXPOSE_PORT
+python3 /logic/manage.py runserver 0.0.0.0:$EXPOSE_PORT --settings=config.environments.production
