@@ -42,7 +42,7 @@
     <div class="empty" id="timetable"></div>
     <h1 class="title" id="target">타임테이블</h1>
     <div class="timetable">
-      <img src="{% static 'img/timetable-title.png' %}" class="timetableImage" alt="timetable" width="85%" />
+      <img src="{% static 'index/img/timetable-title.png' %}" class="timetableImage" alt="timetable" width="85%" />
       <div class="swiper-container swiper-timetable">
       <!-- Additional required wrapper -->
       <div class="swiper-wrapper">
@@ -169,7 +169,23 @@
     }
 
     function showEvent(event, number) {
-      document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('" + "{% static 'img/event/event_' %}" + number + ".jpg')"
+      if (number === 1)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_1.jpg'}')"
+      else if(number === 2)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_2.jpg'}')"
+      else if(number === 3)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_3.jpg'}')"
+      else if(number === 4)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_4.jpg'}')"
+      else if(number === 5)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_5.jpg'}')"
+      else if(number === 6)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_6.jpg'}')"
+      else if(number === 7)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_7.jpg'}')"
+      else
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_8.jpg'}')"
+
       document.querySelectorAll('.index-modal')[0].style.display = 'flex' 
       event.stopPropagation()
     }

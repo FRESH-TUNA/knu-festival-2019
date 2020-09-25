@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'sass_processor',
     'rest_framework',
     'corsheaders',
+    'storages'
 ]
 
 MIDDLEWARE = [

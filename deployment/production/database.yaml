@@ -24,7 +24,7 @@ spec:
       volumes:
       - name: db-volume
         hostPath:
-          # directory location on host
+          # directory location on host and most create folder before apply
           path: /volumes/knufesta2019-db-volume
           # this field is optional
           type: Directory
