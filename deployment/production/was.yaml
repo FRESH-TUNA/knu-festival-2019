@@ -37,7 +37,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: production-asset-compiler
+  name: production-migrator
   namespace: knufesta2019
 spec:
   template:
@@ -56,13 +56,13 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: production-migrator
+  name: production-asset-compiler
   namespace: knufesta2019
 spec:
   template:
     spec:
       containers:
-      - name: production-migrator
+      - name: production-asset-compiler
         image: lunacircle4/was.knufesta2019:${TAG}
         command: ["/bin/sh"]
         args: ["./docker/entrypoints/asset_compile.sh"]
