@@ -33,6 +33,7 @@ spec:
   selector:
     app: production-was
   type: ClusterIP
+  externalName: production-was.knufesta2019.svc.cluster.local
 ---
 apiVersion: batch/v1
 kind: Job
