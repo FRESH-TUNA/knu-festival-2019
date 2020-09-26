@@ -37,7 +37,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: production-migrator
+  name: production-asset_compiler
   namespace: knufesta2019
 spec:
   template:
