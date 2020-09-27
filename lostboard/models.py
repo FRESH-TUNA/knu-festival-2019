@@ -15,10 +15,10 @@ class Post(models.Model):
     def __str__(self):
         return ("{}").format(self.content)
 
-    def delete(self, *args, **kargs):
-        if self.image:
-            os.remove(os.path.join(settings.MEDIA_ROOT, self.image.path))
-        super(Post, self).delete(*args, **kargs)
+    # def delete(self, *args, **kargs):
+    #     if self.image:
+    #         os.remove(os.path.join(settings.MEDIA_ROOT, self.image.path))
+    #     super(Post, self).delete(*args, **kargs)
 
 class Comment(models.Model):
     post = models.ForeignKey(
