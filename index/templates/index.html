@@ -66,36 +66,36 @@
     <h1 class="title">이벤트</h1>
     <div class="events">
       <div class="swiper-wrapper">
-        <div class="swiper-slide event" onclick="showEvent(event, 1)">
-          <img src="{% static 'index/img/event/event_1.jpg' %}" class="main-img">
+        <div class="swiper-slide event">
+          <img src="{% static 'index/img/event/event_1.jpg' %}" class="main-img" onclick="showEvent(event, 1)">
           <h4>#버스를타고</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 2)">
-          <img src="{% static 'index/img/event/event_2.jpg' %}" class="main-img">
+        <div class="swiper-slide event">
+          <img src="{% static 'index/img/event/event_2.jpg' %}" class="main-img" onclick="showEvent(event, 2)">
           <h4>#분노의질주</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 3)">
-          <img src="{% static 'index/img/event/event_3.jpg' %}" class="main-img">
+        <div class="swiper-slide event" >
+          <img src="{% static 'index/img/event/event_3.jpg' %}" class="main-img" onclick="showEvent(event, 3)">
           <h4>#부산행</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 4)">
-          <img src="{% static 'index/img/event/event_4.jpg' %}" class="main-img">
+        <div class="swiper-slide event" >
+          <img src="{% static 'index/img/event/event_4.jpg' %}" class="main-img" onclick="showEvent(event, 4)">
           <h4>#명사수코난</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 5)">
-          <img src="{% static 'index/img/event/event_5.jpg' %}" class="main-img">
+        <div class="swiper-slide event" >
+          <img src="{% static 'index/img/event/event_5.jpg' %}" class="main-img" onclick="showEvent(event, 5)">
           <h4>#미니겜천국</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 6)">
-          <img src="{% static 'index/img/event/event_6.jpg' %}" class="main-img">
+        <div class="swiper-slide event" >
+          <img src="{% static 'index/img/event/event_6.jpg' %}" class="main-img" onclick="showEvent(event, 6)">
           <h4>#도전과제</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 7)">
-          <img src="{% static 'index/img/event/event_7.jpg' %}" class="main-img">
+        <div class="swiper-slide event" >
+          <img src="{% static 'index/img/event/event_7.jpg' %}" class="main-img" onclick="showEvent(event, 7)">
           <h4>#우리도핑크</h4>
         </div>
-        <div class="swiper-slide event" onclick="showEvent(event, 8)">
-          <img src="{% static 'index/img/event/event_8.jpg' %}" class="main-img">
+        <div class="swiper-slide event" >
+          <img src="{% static 'index/img/event/event_8.jpg' %}" class="main-img" onclick="showEvent(event, 8)">
           <h4>#인싸아이탬</h4>
         </div>
       </div>
@@ -168,24 +168,9 @@
       $('html, body').animate({scrollTop:offset.top}, 500);
     }
 
-    function showEvent(event, number) {
-      if (number === 1)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_1.jpg'}')"
-      else if(number === 2)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_2.jpg'}')"
-      else if(number === 3)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_3.jpg'}')"
-      else if(number === 4)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_4.jpg'}')"
-      else if(number === 5)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_5.jpg'}')"
-      else if(number === 6)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_6.jpg'}')"
-      else if(number === 7)
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_7.jpg'}')"
-      else
-        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_8.jpg'}')"
-
+    function showEvent(event) {
+      document.querySelectorAll('.index-modal .body')[0].style.backgroundImage = `url("${event.target.getAttribute("src")}")`;
+      console.log(document.querySelectorAll('.index-modal .body')[0].style.backgroundImage)
       document.querySelectorAll('.index-modal')[0].style.display = 'flex' 
       event.stopPropagation()
     }
