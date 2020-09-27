@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+{% load rest_framework %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'base/css/board.css' %}">
+<link rel="stylesheet" href="{% static 'lostboard/css/posts.detail.css' %}">
+{% endblock %}
+
+{% block contents %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div class="boardBody fontClass2">
+    {% include 'messages.html' %}
+
+    <div class="board-header">
+        <p class="title">분실물</p>
+        <a href="javascript:history.back()">뒤로가기</a>
+    </div>
+    <div class="boards detail-container">
+        <div class="board-detail">
+            <div class="detail-header">
+                {% if found is True %}
+                <p>주웠어요</p>
+                {% else %}
+                <p>잃어버렸어요</p>
+                {% endif %}
+                <div class="buttons">
+                    <button id="cmtBtn" onclick="show_add_comment_modal(event)" class="btn-addcmt"></button>
+                    <button id="editBtn" data-toggle="modal" data-target="#updateModal" class="big btn-editcmt"></button>
+                    <button id="delBtn" onclick="show_delete_post_modal(event)"></button>
+                </div>
+            </div>
+            <div class="detail-content">
+                <div style="word-break:break-all">{{content|linebreaks}}</div>
+                <br>
+            </div>
+            {% if image %}
+            <img src="{{ image }}" alt="">
+            {% endif %}
+            <div class="detail-footer">
+                <p class="footerArea">{{created_at}}</p>
+                <p class="footerArea">댓글 {{ comments.count }}개</p>
+            </div>
+        </div>
+        <hr>
+
+        <div class="board-detail-comments lostboard"></div>
+
+        {% include 'lostboard/posts.delete.form.html' %}
+
+        {% include 'lostboard/posts.update.form.html' with url=url content=content found=found%}
+
+        {% include 'lostboard/posts/comments.create.form.html' %}
+
+        {% include 'lostboard/comments/comments.create.form.html' %}
+
+        {% include 'lostboard/comments.delete.form.html' %}
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{% static 'lostboard/js/posts.detail.js' %}"></script>
+<script src="{% static 'lostboard/js/posts/comments.list.js' %}"></script>
+<script src="{% static 'lostboard/js/comments/comments.list.js' %}"></script>
+<script src="{% static 'lostboard/js/comments.detail.js' %}"></script>
+<script>
+    window.onload = async function () {
+        posts_comments_list("{{ comments.url }}.json")
+    }
+</script>
+{% endblock %}

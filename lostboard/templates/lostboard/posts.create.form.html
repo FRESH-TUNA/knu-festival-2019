@@ -1,0 +1,31 @@
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog create-modal" role="document">
+        <div class="modal-content create-modal-body">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">분실물 작성</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'lostboard:posts-list' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p> <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"
+                            placeholder="분실물 주웠어요 or 찾아요"></textarea></p>
+                    <p><label for="id_image">사진</label> <input type="file" name="image" id="id_image"></p>
+                    <p><label for="found">주웠어요</label> <input id="found" type='radio' name='found' value=True required>
+                    </p>
+                    <p><label for="finding">잃어버렸어요</label> <input id="finding" type='radio' name='found' value=False>
+                    </p>
+                    <p><input type="password" name="password" maxlength="200" required="" id="id_password"
+                            placeholder="패스워드"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-primary">작성</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

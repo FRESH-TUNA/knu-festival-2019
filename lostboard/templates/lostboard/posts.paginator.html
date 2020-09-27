@@ -1,0 +1,21 @@
+{% if posts is not None %}
+<ul class="pagination">
+    {% if links.previous %}
+    <li><a href="{{ links.first }}">First</a></li>
+    <li><a href="{{ links.previous }}">&#60;</a></li>
+    {% endif %}
+
+    {% for page in links.pages %}
+    {% if page.index == index %}
+    <li>{{ index }}</li>
+    {% elif page.index > index|add:'-3' and page.index < index|add:'3' %}
+    <li><a href="{{page.url}}">{{page.index}}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if links.next %}
+    <li><a href="{{ links.next }}">&#62;</a></li>
+    <li><a href="{{ links.last }}">Last</a></li>
+    {% endif %}
+</ul>
+{% endif %}

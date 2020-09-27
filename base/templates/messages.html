@@ -1,0 +1,15 @@
+{% if messages %}
+{% for message in messages %}
+{% if message.tags == 'info' %}
+<div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ message }}
+</div>
+{% else %}
+<div class="alert alert-danger alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{ message }}
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}

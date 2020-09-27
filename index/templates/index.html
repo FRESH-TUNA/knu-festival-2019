@@ -1,0 +1,198 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load sass_tags %}
+
+{% block css %}
+<!-- swiper package -->
+<link rel="stylesheet" href="{% static 'base/css/swiper.css'%}">
+<!-- index -->
+<link rel="stylesheet" type="text/css" href="{% static 'index/css/index.css'%}">
+<!-- progressbar -->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'index/sass/progressbar.sass'%}">
+{% endblock %}
+
+{% block contents %}
+
+  <div class="contentContainer main-img"><img src="{% static 'index/img/main.png' %}" width="100%" height="50%"/></div>
+
+  <div class="fontWhite buttonContainer">
+    <button onclick="fnMove('lineup')" class="scroll btn btn-secondary">라인업</button>
+    <button onclick="fnMove('timetable')" class="scroll btn btn-secondary">타임테이블</button>
+    <button onclick="fnMove('event')" class="scroll btn btn-secondary">이벤트</button>
+    <button onclick="fnMove('zone')" class="scroll btn btn-secondary">강대ZONE</button>
+  </div>
+
+  <div class="fontWhite contentContainer">
+    <div class="empty" id="lineup"></div>
+    <h1 class="title">라인업</h1>
+    <!-- Slider main container -->
+    <div class="swiper-container swiper-lineup">
+      <!-- Additional required wrapper -->
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide"><img class="swiper-image" src="{% static 'index/img/lineup-wed.png' %}" alt="수요일 라인업" width="100%" height="50%"/></div>
+        <div class="swiper-slide"><img class="swiper-image" src="{% static 'index/img/lineup-thu.png' %}" alt="목요일 라인업" width="100%" height="50%"/></div>
+      </div>
+        <!-- If we need pagination -->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+  
+  <div class="fontWhite contentContainer">
+    <div class="empty" id="timetable"></div>
+    <h1 class="title" id="target">타임테이블</h1>
+    <div class="timetable">
+      <img src="{% static 'index/img/timetable-title.png' %}" class="timetableImage" alt="timetable" width="85%" />
+      <div class="swiper-container swiper-timetable">
+      <!-- Additional required wrapper -->
+      <div class="swiper-wrapper">
+        <!-- Slides -->
+        <div class="swiper-slide"><img src="{% static 'index/img/timetable-tue.png' %}" alt="화요일" width="100%" height="100%"/></div>
+        <div class="swiper-slide"><img src="{% static 'index/img/timetable-wed.png' %}" alt="수요일" width="100%" height="100%"/></div>
+        <div class="swiper-slide"><img src="{% static 'index/img/timetable-thu.png' %}" alt="목요일" width="100%" height="100%"/></div>
+      </div>
+        <!-- If we need pagination -->
+      <div class="swiper-pagination"></div>
+    </div>
+    </div>
+    <h6>* 9/16일(월) 총학 제공</h6>
+    <h6>* 상기 내용은 당일 상황에 따라 변경될 수 있습니다.</h6>
+  </div>
+
+
+  
+  <div class="fontWhite contentContainer">
+    <div class="empty" id="event"></div>
+    <h1 class="title">이벤트</h1>
+    <div class="events">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide event" onclick="showEvent(event, 1)">
+          <img src="{% static 'index/img/event/event_1.jpg' %}" class="main-img">
+          <h4>#버스를타고</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 2)">
+          <img src="{% static 'index/img/event/event_2.jpg' %}" class="main-img">
+          <h4>#분노의질주</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 3)">
+          <img src="{% static 'index/img/event/event_3.jpg' %}" class="main-img">
+          <h4>#부산행</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 4)">
+          <img src="{% static 'index/img/event/event_4.jpg' %}" class="main-img">
+          <h4>#명사수코난</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 5)">
+          <img src="{% static 'index/img/event/event_5.jpg' %}" class="main-img">
+          <h4>#미니겜천국</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 6)">
+          <img src="{% static 'index/img/event/event_6.jpg' %}" class="main-img">
+          <h4>#도전과제</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 7)">
+          <img src="{% static 'index/img/event/event_7.jpg' %}" class="main-img">
+          <h4>#우리도핑크</h4>
+        </div>
+        <div class="swiper-slide event" onclick="showEvent(event, 8)">
+          <img src="{% static 'index/img/event/event_8.jpg' %}" class="main-img">
+          <h4>#인싸아이탬</h4>
+        </div>
+      </div>
+      <!-- Add Pagination -->
+      <div class="event-pagination"></div>
+  </div>
+  </div>
+
+  <div class="fontWhite contentContainer">
+    <div class="empty" id="zone"></div>
+    <h1 class="title">무대 앞 혼잡도</h1>
+    <div class="zone">
+      <div class="progress-wrap">
+        <div class="progress-radial progress-{{ percent }}">
+          <div class="overlay"><span id="percentage">{{ percent }}%</span></div>
+        </div>
+        <p>{% now "j일 H시 기준" %}</p>
+      </div>
+
+      {% if request.user.is_staff %}
+      <div class="container">
+        <form method="POST" action="{% url 'index:percentage' %}">
+          {% csrf_token %}
+          <input type="number" name="percentage">
+          <button type="submit" class="btn btn-primary">확인</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="index-modal" onclick="closeEvent(event)">
+    <div class="body">
+    </div>
+  </div>
+
+  <!-- swiper package -->
+  <script type="text/javascript" src="{% static 'base/js/swiper.min.js'%}"></script>
+  <script>
+    /* swiper */
+    var mySwiper = new Swiper('.swiper-lineup', {
+      speed: 400,
+      loop: true,
+      autoplay: {
+        delay: 2000,
+      },
+    });
+
+    var mySwiper = new Swiper('.swiper-timetable', {
+      speed: 400,
+      loop: true,
+      autoplay: {
+        delay: 5000,
+      },
+    });
+    
+
+    var events = new Swiper('.events', {
+      slidesPerView: 'auto',
+      centeredSlides: true,
+      spaceBetween: 30,
+      pagination: {
+        el: '.event-pagination',
+        clickable: true,
+      },
+    });
+
+    function fnMove(seq){
+      var offset = $("#" + seq).offset();
+      $('html, body').animate({scrollTop:offset.top}, 500);
+    }
+
+    function showEvent(event, number) {
+      if (number === 1)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_1.jpg'}')"
+      else if(number === 2)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_2.jpg'}')"
+      else if(number === 3)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_3.jpg'}')"
+      else if(number === 4)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_4.jpg'}')"
+      else if(number === 5)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_5.jpg'}')"
+      else if(number === 6)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_6.jpg'}')"
+      else if(number === 7)
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_7.jpg'}')"
+      else
+        document.querySelectorAll('.index-modal .body')[0].style.backgroundImage =  "url('{% static 'index/img/event/event_8.jpg'}')"
+
+      document.querySelectorAll('.index-modal')[0].style.display = 'flex' 
+      event.stopPropagation()
+    }
+
+    function closeEvent(event) {
+      document.querySelectorAll('.index-modal')[0].style.display = 'none';
+      event.stopPropagation();
+    }
+  </script>
+{% endblock %}

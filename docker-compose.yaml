@@ -3,7 +3,7 @@ version: "3"
 services:
   database:
     env_file: 
-      - database/env/.development/.env
+      - envs/database/development.env
     image: postgres:12.2-alpine
     container_name: database.development.knufesta2019
     volumes:
@@ -13,13 +13,13 @@ services:
 
   logic:
     env_file:
-      - logic/env/.development/.env
+      - envs/logic/development.env
     container_name: logic.development.knufesta2019
     build:
-      context: ./logic
+      context: ./
       dockerfile: docker/development/Dockerfile
     volumes:
-      - "./logic:/logic"
+      - "./:/logic"
     ports:
       - "8000:8000"
     networks:

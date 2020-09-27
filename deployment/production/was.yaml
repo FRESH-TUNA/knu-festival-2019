@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: production-was
+  namespace: knufesta2019
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: production-was
+  template:
+    metadata:
+      labels:
+        app: production-was
+    spec:
+      containers:
+      - name: was
+        image: lunacircle4/was.knufesta2019:${TAG}
+        imagePullPolicy: Always
+        envFrom:
+        - secretRef:
+            name: was-production-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: production-was
+  namespace: knufesta2019
+spec:
+  ports:
+    - name: was-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: production-was
+  type: ClusterIP
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: production-migrator
+  namespace: knufesta2019
+spec:
+  template:
+    spec:
+      containers:
+      - name: production-migrator
+        image: lunacircle4/was.knufesta2019:${TAG}
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: ["-c", "python3 manage.py migrate --settings=config.environments.production;"]
+        envFrom:
+        - secretRef:
+            name: was-production-env
+      restartPolicy: Never
+  backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: production-asset-compiler
+  namespace: knufesta2019
+spec:
+  template:
+    spec:
+      containers:
+      - name: production-asset-compiler
+        image: lunacircle4/was.knufesta2019:${TAG}
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: ["./docker/entrypoints/asset_compile.sh"]
+        envFrom:
+        - secretRef:
+            name: was-production-env
+      restartPolicy: Never
+  backoffLimit: 4

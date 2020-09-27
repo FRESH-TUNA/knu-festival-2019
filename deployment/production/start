@@ -1,0 +1,4 @@
+#!/bin/bash
+
+envsubst < ./was.yaml | sudo kubectl apply -f - -n knufesta2019
+envsubst < ./database.yaml | sudo kubectl apply -f - -n knufesta2019

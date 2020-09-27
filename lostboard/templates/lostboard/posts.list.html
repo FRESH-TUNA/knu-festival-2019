@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'base/css/board.css' %}">
+{% endblock %}
+
+{% block contents %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div class="boardBody fontClass2">
+    <div class="board-header">
+        <p class="title">분실물</p>
+        <button data-toggle="modal" data-target="#createModal" class="big">분실물 작성</button>
+        <button data-toggle="modal" data-target="#createModal" class="small"></button>
+    </div>
+
+    {% include 'messages.html' %}
+
+    <ul class="tabs">
+        <a href="{% url 'lostboard:posts-list' %}?found=True">
+            <li class="tab-link 
+                {% if 'found' in request.GET %}
+                    {% ifequal request.GET.found 'True' %} current {% endifequal %}
+                {% else %}
+                    current
+                {% endif %}" data-tab="tab-1">주웠어요</li>
+        </a>
+        <a href="{% url 'lostboard:posts-list' %}?found=False">
+            <li class="tab-line
+                {% if 'found' in request.GET %}
+                    {% ifequal request.GET.found 'False' %} current {% endifequal %}
+                {% endif %}
+                " data-tab="tab-2">잃어버렸어요</li>
+        </a>
+    </ul>
+
+    <div id="tab-1" class="boards tab-content {% if posts is not None %} current {% endif %}">
+        {% for post in posts %}
+        {% if post.image %}
+        <div class="lostboard lostboard-img">
+            <a href="{{ post.url }}">
+                <p style="word-break:break-all">{{post.content|truncatechars_html:100}}</p>
+            </a>
+            <div class="buttons">
+                <button id="delBtn" onclick="show_delete_post_modal(event)"></button>
+            </div>
+            <img src="{{ post.image }}" alt=""
+                onClick="location.href = '{{ post.url }}'">
+            <div class="lostboard-footer">
+                <a href="{{ post.url }}">
+                    <p>{{post.created_at}}</p>
+                    <p>댓글 {{ post.comments.count }}개</p>
+                </a>
+            </div>
+            {% include 'lostboard/posts.delete.form.html' with url=post.url %}
+        </div>
+        {% else %}
+        <div class="lostboard">
+            <a href="{{ post.url }}">
+                <p style="word-break:break-all">{{post.content|truncatechars_html:100}}</p>
+            </a>
+            <div class="buttons">
+                <button id="delBtn" onclick="show_delete_post_modal(event)"></button>
+            </div>
+            <div class="lostboard-footer">
+                <a href="{{ post.url }}">
+                    <p>{{post.created_at}}</p>
+                    <p>댓글 {{ post.comments.count }}개</p>
+                </a>
+            </div>
+            {% include 'lostboard/posts.delete.form.html' with url=post.url %}
+        </div>
+        {% endif %}
+        </a>
+        {% endfor %}
+    </div>
+
+    {% include 'lostboard/posts.create.form.html' %}
+
+    {% include 'lostboard/posts.paginator.html' %}
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'lostboard/js/posts.list.js' %}"></script>
+{% endblock %}

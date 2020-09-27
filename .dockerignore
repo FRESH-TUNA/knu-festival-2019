@@ -1,0 +1,8 @@
+env/
+media/
+static/
+envs/
+docker-compose.yaml
+init
+knufestival.jpg
+README.md

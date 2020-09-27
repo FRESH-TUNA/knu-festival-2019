@@ -1,0 +1,15 @@
+<div class="modal posts-comments-create">
+    <form action="{{ comments.url }}" method="POST">
+        {% csrf_token %}
+        <div class="modal-content addcmt-body">
+            <div class="addcmt-header">
+                <p>댓글 작성</p>
+                <span class="close" id="cmtcls{{post.pk}}">&times;</span>
+            </div>
+            <textarea name="content" cols="40" rows="10" class="form-control" required="" id="id_content"></textarea>
+            <input type="password" name="password" maxlength="200" required="" id="id_password"
+                placeholder="패스워드를 입력하세요">
+            <button type="submit" class="btn btn-primary">확인</button>
+        </div>
+    </form>
+</div>
