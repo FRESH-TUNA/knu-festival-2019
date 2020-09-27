@@ -16,6 +16,7 @@ spec:
       containers:
       - name: was
         image: lunacircle4/was.knufesta2019:${TAG}
+        imagePullPolicy: Always
         envFrom:
         - secretRef:
             name: was-production-env
@@ -45,6 +46,7 @@ spec:
       containers:
       - name: production-migrator
         image: lunacircle4/was.knufesta2019:${TAG}
+        imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["-c", "python3 manage.py migrate --settings=config.environments.production;"]
         envFrom:
@@ -64,6 +66,7 @@ spec:
       containers:
       - name: production-asset-compiler
         image: lunacircle4/was.knufesta2019:${TAG}
+        imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["./docker/entrypoints/asset_compile.sh"]
         envFrom:

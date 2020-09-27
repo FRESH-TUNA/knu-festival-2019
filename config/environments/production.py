@@ -8,7 +8,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 ROOT_URLCONF = 'config.urls.production'
 
-# WSGI_APPLICATION = 'config.wsgi.production'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # AWS Setting
 AWS_REGION = os.environ['AWS_REGION']
