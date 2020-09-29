@@ -1,42 +1,36 @@
 # deployment
-배포를 위해 필요한 docker-compose 파일들이 버전별로 정리되어있는 폴더이다.
+배포를 위해 필요한 쿠버네티스 관련 yaml 파일들이 정리되어 있다. 테스트환경은 staging 폴더에, 배포환경은 production 폴더에 작성하고 현재는 production 만 운영하고 있다.
 
 ## 1. 간단한 배포과정
-만약 처음 배포를 진행하는것이라면 데이터베이스를 위한 볼륨과 네트워크를 생성해줘야한다. 환경에 따라 다음명령어를 입력하여 볼륨과 네트워크를 생성할수 있다.
+### 1. 만약 처음 배포를 진행하는것이라면 각각의 레이어에 필요한 환경변수 (secret) 들을 먼저 세팅해준다.
 ```sh
-# 테스트환경 볼륨
-docker network create staging.knufesta2019
-docker volume create database.staging.knufesta2019
-
-# 실제 환경 볼륨
-docker network create production.knufesta2019
-docker volume create database.production.knufesta2019
-```
-배포되는 컨테이너에 필요한 환경변수 파일도 생성해줘야한다. 환경변수 파일의 이름은 위에서 사용했던 docker-compose.yaml 파일의 env_file을 통해 알수 있다 (일반적으로 *.env의 형식을 가진다). 프로젝트 루트 폴더 기준으로 다음위치에 환경변수 파일을 작성하거나 관리자로부터 받아서 복사해준다.
-이미 환경변수가 있다면 이과정은 넘어가도 좋다.
-```sh
-# 테스트 환경변수
-touch database/env/.staging/[환경변수 파일이름]
-
-# 실제 환경변수
-touch database/env/.production/[환경변수 파일이름]
+# secret 생성 예제
+sudo kubectl create secret generic was-production-env --from-env-file=production.env --dry-run=client -o yaml | sudo kubectl apply -f - -n knufesta2019
 ```
 
-버전과 환경에 맞는 docker-compose.yaml파일을 찾아서 이미지를 빌드한다. 혹은 이미 레지스트리에 있다면 풀을 받아준다.
-```sh
-# 이미지 빌드
-docker-compose -f deployment/production/1.0.0/docker-compose.yaml build
-
-# 이미지 풀받기
-docker-compose -f deployment/production/1.0.0/docker-compose.yaml pull
-```
-
-모든과정이 끝났다면 다음명령어를 통해 운영환경을 시작할수 있다.
+### 2. 개발이 끝난 버전의 이미지를 빌드한다.
 ```sh
 # 예제
-docker-compose -f deployment/production/1.0.0/docker-compose.yaml up -d
+docker build -t your_image:${TAG} .
 ```
-## 2. docker-compose 파일 예시
-```/deployment/staging/1.0.0/docker-compose.yaml``` [<a href="/deployment/staging/1.0.0/docker-compose.yaml">이동</a>] 테스트 환경 구동을 위한 docker-compose<br/>
 
-```/deployment/production/1.0.0/docker-compose.yaml``` [<a href="/deployment/production/1.0.0/docker-compose.yaml">이동</a>] 배포 환경 구동을 위한 docker-compose<br/>
+### 3. 쿠버네티스 yaml의 파일들의 apply를 진행한다.
+```sh
+# apply 예제
+export TAG=your_version
+envsubst < ./was.yaml | sudo kubectl apply -f - -n knufesta2019
+```
+
+### 3-1. 필요에 따라 마이그레이션이나 정적파일 패포를 위한 job을 apply 한다.
+```sh
+# apply 예제
+export TAG=your_version
+envsubst < ./YOUR_VERSION/jobs.yaml | sudo kubectl apply -f - -n knufesta2019
+```
+
+## 2. docker-compose 파일 예시
+```/production/database.yaml``` [<a href="/production/database.yaml">이동</a>] 데이터베이스 관련 yaml<br/>
+
+```/production/was.yaml``` [<a href="/production/was.yaml">이동</a>] 웹 어플리케이션 관련 yaml<br/>
+
+```/production/2.0.4/jobs.yaml``` [<a href="/production/2.0.4/jobs.yaml">이동</a>] 2.0.4 버전 Jobs 예시<br/>
