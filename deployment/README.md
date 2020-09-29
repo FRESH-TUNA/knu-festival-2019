@@ -28,7 +28,7 @@ export TAG=your_version
 envsubst < ./YOUR_VERSION/jobs.yaml | sudo kubectl apply -f - -n knufesta2019
 ```
 
-## 2. docker-compose 파일 예시
+## 2. kubernetes yaml 파일 예시
 ```production/database.yaml``` [<a href="production/database.yaml">이동</a>] 데이터베이스 관련 yaml<br/>
 
 ```production/was.yaml``` [<a href="production/was.yaml">이동</a>] 웹 어플리케이션 관련 yaml<br/>
