@@ -29,7 +29,7 @@ postgresql 데이터베이스, Django가 제공하는 개발용 WAS의 2-layer �
 ### 2. 운영환경
 postgresql 데이터베이스, gunicorn WAS, nginx web server 의 3-layer 구성으로 되어있다.
 
-## 3. 개발환경 시작하기
+## 4. 개발환경 시작하기
 개발환경을 시작하기전에 docker와 docker-compose의 설치가 필요하다. 다음 공식문서를 참고해 서버나 PC에 설치해준다.
 <a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a>
 <a href="https://docs.docker.com/compose/install/">https://docs.docker.com/compose/install/</a>
@@ -46,7 +46,7 @@ chmod 700 ./init
 docker-compose up
 ```
 
-## 4. 프로젝트 환경 관련 폴더
+## 5. 프로젝트 환경 관련 폴더
 ### 1. config
 서비스를 위한 설정값들이 담겨 있다.
 <br>
@@ -64,7 +64,7 @@ docker-compose up
 개발 환경에 필요한 환경변수들이 담길 폴더<br>
 [<a href="/envs">docker 폴더 이동</a>]
 
-## 5. 프로젝트 기능 관련 폴더
+## 6. 프로젝트 기능 관련 폴더
 ### 1. base 
 앱들에 공통적으로 쓰이는 로직, 템플릿이 담겨있다.<br>
 [<a href="/base">base 폴더 이동</a>]
