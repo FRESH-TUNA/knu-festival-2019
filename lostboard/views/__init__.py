@@ -1,3 +1,43 @@
+"""레일즈 스타일의 BaseView 만들기
+
+레일즈 프레임워크에서는 정해진 네이밍 규칙을 따르면 
+컨트롤러에서 필요한 모듈을 자동으로 import 하는 
+편리함을 가지고 있습니다. 또한 기본적으로 Restful한 
+메소드 모두 지원해줍니다.
+
+Django 에선 이기능들을 제공하지 않아 직접 한번 구현해봤습니다.
+기존 GET, POST방식만 지원하는것과는 다르게 restful method를 
+모두 지원하도록 설계했고 model, queryset, serializer, 
+paginator, template을 네이밍 규칙에 따라 자동으로 로딩합니다.
+따라서 추가적인 변경이 필요하지 않으면 get_queryset() 등의 메소드를
+오버로딩 하지 않아도 됩니다.
+다른 view class 에서 이 BaseView를 import 해서 사용하면 됩니다.
+
+만약 커스텀한설정이 필요하다면 그부분을 overloading 하여 
+사용하면 됩나다.
+"""
+
+"""네이밍 규칙 예제
+예제1) GET, <app_name>/posts 에 해당하는 로직
+1. <app_name>/models.py 에서 Post를 찾아 로딩
+2. model의 정보를 바탕으로 posts/<post_pk>/comments 의 데이터들을 로딩
+3. <app_name>/serializer/posts/comments_list_serializer.py 
+   에서 CommentsListSerializer 클래스를 로딩
+4. <app_name>/paginators/posts_paginator.py 에서 PostsPaginator 
+   클래스를 로딩
+5. <app_name>/templates/<app_name>/posts/comments.list.html
+   을 랜더링
+
+예제2) GET, <app_name>/posts/<post_pk>/comments 에 해당하는 로직
+1. <app_name>/models.py 에서 Comment를 찾아 로딩
+2. model의 정보를 바탕으로 posts/<post_pk>/comments 의 데이터들을 로딩
+3. <app_name>/serializer/posts/comments_list_serializer.py 
+   에서 CommentsListSerializer 클래스를 로딩
+4. <app_name>/paginators/posts_paginator.py 에서 PostsPaginator 
+   클래스를 로딩
+5. <app_name>/templates/<app_name>/posts/comments.list.html
+   을 랜더링
+"""
 import importlib
 import re
 import os
@@ -16,8 +56,8 @@ from rest_framework.renderers import (
 
 class BaseView(ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer, JSONRenderer]
-    # lookup_field = 'comment_pk'
-    ## dispatch ##
+
+    # put, delete 지원을 위한 overloading
     def dispatch(self, request, *args, **kwargs):
         # delete, update, patch... support
         def restful_support(request):
@@ -40,7 +80,6 @@ class BaseView(ModelViewSet):
         self.autoload_paginator()
         self.autoload_template()
 
-    ## autoloading ##
     def autoload_model(self):
         if getattr(self, 'model', None) is None:
             try:
@@ -190,24 +229,3 @@ class BaseView(ModelViewSet):
 
     def camelize_snake(self, sentence):
         return ''.join(x.title() for x in sentence.split('_'))
-
-    # def autoload_service(self):
-    #     import logging
-    #     service_path = "%s.services" % self.request.resolver_match.app_name
-    #     service_dir_path = os.path.dirname(
-    #         __import__(service_path, globals(), locals(), ['*']).__file__
-    #     )
-    #     service_files = [
-    #         _file 
-    #             for _file in os.listdir(service_dir_path) 
-    #                 if os.path.isfile(os.path.join(service_dir_path, _file))
-    #     ][1:]
-    #     for _file in service_files:
-    #         file_name = _file[:-3]
-    #         service_class_name = self.camelize_snake(file_name)
-    #         globals()[service_class_name] = getattr(
-    #             __import__(
-    #                 "%s.%s" % (service_path, file_name), 
-    #                 globals(), locals(), [service_class_name]
-    #             ), service_class_name
-    #         )
