@@ -1,11 +1,11 @@
 #!/bin/sh
 
-printf "postgres running check "
+# printf "postgres running check "
 
-until pg_isready -h production-db >/dev/null 2>&1; do  
-  printf "."
-  sleep 3
-done
+# until pg_isready -h production-db >/dev/null 2>&1; do  
+#   printf "."
+#   sleep 3
+# done
 
 # python3 /logic/manage.py migrate --settings=config.environments.production
 # python3 /logic/manage.py compilescss --settings=config.environments.production
